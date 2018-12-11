@@ -1,0 +1,26 @@
+{
+  "name": "apples-to-ai-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The greatest thing since sliced bread",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jming422/apples-to-ai-backend.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/jming422/apples-to-ai-backend/issues"
+  },
+  "homepage": "https://github.com/jming422/apples-to-ai-backend#readme",
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "morgan": "~1.9.0"
+  }
+}
