@@ -44,20 +44,20 @@ router.post("/", (req, res) => {
  * Responds with the following body:
  * { token: "" }
  */
-router.post("/:gameName/player", (req, res) => {
+router.post("/:gameName/player", async (req, res) => {
   const gameName = req.params.gameName;
-  const game = dynamo.getGameState(gameName);
+  const game = await dynamo.getGameState(gameName);
   if (!game) {
     res.status(404).send("No game of that name.")
   }
   const token = uuid();
-  dynamo.addPlayerToGame(gameName, token, req.email);
+  await dynamo.addPlayerToGame(gameName, token, req.email);
   res.send({ token: token });
 });
 
 // GET game state
-router.get("/:gameName", (req, res) => {
-  const game = dynamo.getGameState(req.params.gameName);
+router.get("/:gameName", async (req, res) => {
+  const game = await dynamo.getGameState(req.params.gameName);
   if (game) {
     res.send(game.GameState);
   } else {
@@ -65,8 +65,22 @@ router.get("/:gameName", (req, res) => {
   }
 });
 
-// POST round leader sets the word for the round
-router.post("/:gameName/word");
+/* POST round leader sets the word for the round
+ * Expects a JSON body like:
+ * {
+ *   word: "door"
+ * }
+ * Responds with 200
+ */
+router.post("/:gameName/word", async (req, res) => {
+  const gameName = req.params.gameName;
+  const game = await dynamo.getGameState(gameName);
+  if (!game) {
+    res.status(404).send("No game of that name.")
+  }
+  await dynamo.addRoundLeaderWord(gameName, req.word);
+  res.end();
+});
 
 // POST player uploads their image submission for the round
 router.post("/:gameName/submission", (req, res) => {
