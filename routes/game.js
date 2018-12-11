@@ -71,7 +71,12 @@ router.get("/:gameName", async (req, res) => {
  * Responds with 200
  */
 router.post("/:gameName/word", async (req, res) => {
-  await dynamo.addRoundLeaderWord(req.params.gameName, req.word);
+  const gameName = req.params.gameName;
+  const game = await dynamo.getGameState(gameName);
+  if (!game) {
+    res.status(404).send("No game of that name.")
+  }
+  await dynamo.addRoundLeaderWord(gameName, req.word);
   res.end();
 });
 
