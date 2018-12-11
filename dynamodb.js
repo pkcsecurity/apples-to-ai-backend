@@ -3,7 +3,7 @@ aws.config.update({ region: "us-west-2" });
 const dc = new aws.DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 
 exports.initNewGame = (name, ownerToken, ownerEmail, maxScore) => {
-  let params = {
+  const params = {
     TableName: "apples-to-ai",
     Item: {
       GameName: name,
@@ -21,6 +21,13 @@ exports.initNewGame = (name, ownerToken, ownerEmail, maxScore) => {
     if (err) console.error(err);
     else console.log(data);
   });
+};
+
+exports.getGameState = gameName => {
+  const params = {
+    TableName: "apples-to-ai",
+    Key: { GameName: gameName }
+  };
 };
 
 /*
