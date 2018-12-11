@@ -64,12 +64,18 @@ router.get("/:gameName", (req, res) => {
 });
 
 // POST round leader sets the word for the round
-router.post("/:gameId/word");
+router.post("/:gameName/word");
 
 // POST player uploads their image submission for the round
-router.post("/:gameId/submission");
+router.post("/:gameName/submission", (req, res) => {
+  // Upload image to s3 (you'll need to construct a filename)
+  // /gameName/datetime-token png/jpg
+  // Send s3 URL to rekog
+  // Once you get response, call the function below to save to dynamo
+  dynamo.addPlayerImageSubmission(gameName, token, imgUrl, rekogData);
+});
 
 // POST round leader chooses the winning submission
-router.post("/:gameId/choice");
+router.post("/:gameName/choice");
 
 module.exports = router;
