@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+AWS.config.update({region: "us-east-1"});
 const s3 = new AWS.S3();
 
 function uploadImage(bucketName, imgName, img){
@@ -24,4 +25,3 @@ function getImgsOfBucket(bucketName){
     else  console.log(data);
   });
 }
-
