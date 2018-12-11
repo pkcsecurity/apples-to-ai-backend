@@ -42,14 +42,14 @@ router.post("/", (req, res) => {
  * Responds with the following body:
  * { token: "" }
  */
-router.post("/:gameName/player", (req, res) => {
+router.post("/:gameName/player", async (req, res) => {
   const gameName = req.params.gameName;
-  const game = dynamo.getGameState(gameName);
+  const game = await dynamo.getGameState(gameName);
   if (!game) {
     res.status(404).send("No game of that name.")
   }
   const token = uuid();
-  dynamo.addPlayerToGame(gameName, token, req.email);
+  await dynamo.addPlayerToGame(gameName, token, req.email);
   res.send({ token: token });
 });
 
