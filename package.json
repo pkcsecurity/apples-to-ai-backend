@@ -5,7 +5,8 @@
   "description": "The greatest thing since sliced bread",
   "main": "index.js",
   "scripts": {
-    "start": "node ./bin/www & cd client && npm start && fg"
+    "start": "node ./bin/www",
+    "startboth": "node ./bin/www & cd client && npm start && fg"
   },
   "repository": {
     "type": "git",

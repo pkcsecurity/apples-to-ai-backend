@@ -76,7 +76,7 @@ router.post("/:gameName/word", async (req, res) => {
   if (!game) {
     res.status(404).send("No game of that name.")
   }
-  await dynamo.addRoundLeaderWord(gameName, req.word);
+  await dynamo.addRoundLeaderWord(gameName, req.token, req.word);
   res.end();
 });
 
@@ -86,10 +86,18 @@ router.post("/:gameName/submission", (req, res) => {
   // /gameName/datetime-token png/jpg
   // Send s3 URL to rekog
   // Once you get response, call the function below to save to dynamo
-  dynamo.addPlayerImageSubmission(gameName, token, imgUrl, rekogData);
+  dynamo.addPlayerImageSubmission(gameName, req.token, imgUrl, rekogData);
 });
 
 // POST round leader chooses the winning submission
-router.post("/:gameName/choice");
+router.post("/:gameName/choice", async (req, res) => {
+  const gameName = req.params.gameName;
+  const game = await dynamo.getGameState(gameName);
+  if (!game) {
+    res.status(404).send("No game of that name.")
+  }
+  await dynamo.addRoundLeaderChoice(gameName, req.token, req.word);
+  res.end();
+});
 
 module.exports = router;
