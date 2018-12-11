@@ -1,21 +1,30 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import Splash from "./Splash.js";
 
 class App extends Component {
-  state = {welcomeBanner: ''}
+  constructor(props) {
+    super(props);
+    this.state = { currentScreen: "Splash" };
+  }
+
+  renderScreen(screenName) {
+    console.log(`renderScreen got ${screenName}`);
+    switch (screenName) {
+      case "Splash":
+        return <Splash />;
+      default:
+        return <p>Guess you broke it.</p>;
+    }
+  }
 
   componentDidMount() {
-    fetch('/game')
-      .then(res => res.text())
-      .then(welcomeBanner => this.setState({ welcomeBanner }));
+    console.log("main app mounted");
   }
 
   render() {
     return (
-      <div className="App">
-        <h1>{this.state.welcomeBanner}</h1>
-      </div>
+      <div className="App">{this.renderScreen(this.state.currentScreen)}</div>
     );
   }
 }
