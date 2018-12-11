@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/jming422/apples-to-ai-backend#readme",
   "dependencies": {
+    "aws-sdk": "^2.373.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
