@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const uuid = require("uuid/v4");
 const dynamo = require("../dynamodb");
+const s3 = require("../aws/s3");
+const rekognition = require("../aws/rekognition");
 
 /*
  * This is the /game router!
