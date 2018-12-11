@@ -13,7 +13,7 @@ exports.initNewGame = (name, ownerToken, ownerEmail, maxScore) => {
       MaxScore: maxScore,
       WinningPlayerIndex: null,
       StartDateTime: Date.now(),
-      State: []
+      GameState: []
     }
   };
 
@@ -28,38 +28,13 @@ exports.getGameState = gameName => {
     TableName: "apples-to-ai",
     Key: { GameName: gameName }
   };
-};
 
-/*
-
-Game: {
-    name: ""
-    gameOwner: token
-    players: [
-        {email: "nhatcher@pkcsecurity.com", token: <uuid>, score: 0}
-    ]
-    currentPlayerIndex: 0
-    maxScore: 7
-    winningPlayerIndex: null
-    startDateTime
-
-GameState: [
-    {
-        leaderIndex: 0,
-        objectWord: "door"
-        step: 1
-        submissions: [
-            {
-                imgUrl: http....
-                playerIndex: 1
-                wordFoundInImage: bool
-                chosen: bool
-                foundInImage: { aws label response} 
-            }
-        ]
-
+  dc.get(params, (err, data) => {
+    if (err) {
+      console.error(err);
+      return null;
+    } else {
+      return data.Item;
     }
-]
-}
-
-*/
+  });
+};
