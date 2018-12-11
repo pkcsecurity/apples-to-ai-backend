@@ -38,3 +38,8 @@ exports.getGameState = gameName => {
     }
   });
 };
+
+exports.addPlayerToGame = (gameName, token, email) => {
+
+
+}
