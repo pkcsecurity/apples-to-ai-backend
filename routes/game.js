@@ -54,8 +54,8 @@ router.post("/:gameName/player", async (req, res) => {
 });
 
 // GET game state
-router.get("/:gameName", (req, res) => {
-  const game = dynamo.getGameState(req.params.gameName);
+router.get("/:gameName", async (req, res) => {
+  const game = await dynamo.getGameState(req.params.gameName);
   if (game) {
     res.send(game.GameState);
   } else {
@@ -63,8 +63,17 @@ router.get("/:gameName", (req, res) => {
   }
 });
 
-// POST round leader sets the word for the round
-router.post("/:gameName/word");
+/* POST round leader sets the word for the round
+ * Expects a JSON body like:
+ * {
+ *   word: "door"
+ * }
+ * Responds with 200
+ */
+router.post("/:gameName/word", async (req, res) => {
+  await dynamo.addRoundLeaderWord(req.params.gameName, req.word);
+  res.end();
+});
 
 // POST player uploads their image submission for the round
 router.post("/:gameName/submission", (req, res) => {
