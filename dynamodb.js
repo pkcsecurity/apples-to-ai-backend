@@ -2,28 +2,32 @@ const aws = require("aws-sdk");
 aws.config.update({ region: "us-west-2" });
 const dc = new aws.DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 
-const initNewGame = (name, ownerToken, ownerEmail, maxScore) => {
-  const params = {
-    TableName: "apples-to-ai",
-    Item: {
-      GameName: name,
-      GameOwner: ownerToken,
-      Players: [{ email: ownerEmail, token: ownerToken, score: 0 }],
-      CurrentPlayerIndex: 0,
-      MaxScore: maxScore,
-      WinningPlayerIndex: null,
-      StartDateTime: Date.now(),
-      GameState: [
-        getBlankGameRound(0)
-      ]
-    }
+const initNewGame = async (name, ownerToken, ownerEmail, maxScore) => {
+  const game = {
+    GameName: name,
+    GameOwner: ownerToken,
+    Players: [{ email: ownerEmail, token: ownerToken, score: 0 }],
+    CurrentPlayerIndex: 0,
+    MaxScore: maxScore,
+    WinningPlayerIndex: null,
+    StartDateTime: Date.now(),
+    GameState: [
+      getBlankGameRound(0)
+    ]
   };
 
-  dc.put(params, (err, data) => {
-    if (err) console.error(err);
-    else console.log(data);
-  });
+  await saveGame(game);
 };
+
+const saveGame = async (game) => {
+  const params = {
+    TableName: "apples-to-ai",
+    Item: game
+  };
+
+  return await dc.put(params).promise();
+}
+
 
 const getBlankGameRound = () => {
   return {
@@ -34,22 +38,19 @@ const getBlankGameRound = () => {
   }
 }
 
-
-
-const getGameState = gameName => {
+const getGameState = async gameName => {
   const params = {
     TableName: "apples-to-ai",
     Key: { GameName: gameName }
   };
 
-  dc.get(params, (err, data) => {
-    if (err) {
-      console.error(err);
-      return null;
-    } else {
-      return data.Item;
-    }
-  });
+  try {
+    const resp = await dc.get(params).promise();
+    return resp.Item;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
 };
 
 const addPlayerToGame = (gameName, token, email) => {
@@ -60,8 +61,7 @@ const addPlayerToGame = (gameName, token, email) => {
 const addPlayerImageSubmission = (gameName, token, imgUrl, rekogData) => {
   const game = getGameState(gameName);
   const imgSub = getSubmission(game, token, imgUrl, rekogData);
-  game
-
+  game.GameState[game.GameState.length - 1].submissions.push(imgSub);
 }
 
 
