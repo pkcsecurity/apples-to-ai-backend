@@ -25,13 +25,33 @@ router.get("/", (req, res) => {
  * { token: "" }
  */
 router.post("/", (req, res) => {
+  const game = dynamo.getGameState(req.gameName);
+  if (game) {
+    res.status(400).send("Game with that name already exists")
+  }
   const token = uuid();
   dynamo.initNewGame(req.gameName, token, req.ownerEmail, req.maxScore);
   res.send({ token: token });
 });
 
-// POST a new player enters a game
-router.post("/:gameId/player");
+/* POST a new player enters a game
+ * Expects a JSON body like:
+ * {
+ *   email: ""
+ * }
+ * Responds with the following body:
+ * { token: "" }
+ */
+router.post("/:gameName/player", (req, res) => {
+  const gameName = req.params.gameName;
+  const game = dynamo.getGameState(gameName);
+  if (!game) {
+    res.status(404).send("No game of that name.")
+  }
+  const token = uuid();
+  dynamo.addPlayerToGame(gameName, token, req.email);
+  res.send({ token: token });
+});
 
 // GET game state
 router.get("/:gameName", (req, res) => {
@@ -50,6 +70,6 @@ router.post("/:gameId/word");
 router.post("/:gameId/submission");
 
 // POST round leader chooses the winning submission
-router.post("/:gameId/submission");
+router.post("/:gameId/choice");
 
 module.exports = router;
