@@ -70,10 +70,22 @@ router.post("/:gameName/word");
 
 // POST player uploads their image submission for the round
 router.post("/:gameName/submission", (req, res) => {
-  // Upload image to s3 (you'll need to construct a filename)
-  // /gameName/datetime-token png/jpg
+  // Upload image to s3
+  const gameName = req.params.gameName;
+  const token = req.token;
+  const bucketName = "applestoai/" + gameName;
+  const imgName = Date.now() + token + ".jpg";
+  const img = req.body.img;
+  const s3Res = s3.uploadImage(bucketName, imgName, img);
+  if(s3Res.statuCode != 200){
+    res.status(400).send("Image submission failed.");
+  }
+
+  const rekData = rekognition.getLabels(bucketName, imgName);
+  if(!rekData.Labels){
+    res.status(400).send("Image or bucket not accessible.")
+  }
   // Send s3 URL to rekog
-  // Once you get response, call the function below to save to dynamo
   dynamo.addPlayerImageSubmission(gameName, token, imgUrl, rekogData);
 });
 

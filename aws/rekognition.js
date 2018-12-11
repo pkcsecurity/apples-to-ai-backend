@@ -15,7 +15,7 @@ const getLabels = (bucketName, imgName) => {
   };
   rekognition.detectLabels(params, function(err, data){
     if(err) console.log(err);
-    else  console.log(data);
+    else  data;
   });
 }
 
