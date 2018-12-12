@@ -113,7 +113,7 @@ router.post("/:gameName/submission", async (req, res) => {
   const gameName = req.params.gameName;
   const token = req.token;
   const bucketName = "applestoaisubmissions/" + gameName;
-  const img = fs.readFile(path.join(__dirname, `./${req.body.fileName}`));
+  const img = fs.readFile(path.join(__dirname, `../${req.body.fileName}`));
   const imgName = Date.now() + token + ".jpg";
 
   try {
