@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-AWS.config.update({region: "us-east-1"});
+AWS.config.update({region: "us-west-2"});
 const s3 = new AWS.S3();
 const fs = require('fs');
 const path = require("path");

@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-AWS.config.update({ region: "us-east-1" });
+AWS.config.update({ region: "us-weat-2" });
 const rek = new AWS.Rekognition();
 
 const getLabels = async (bucketName, imgName) => {
