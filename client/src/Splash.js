@@ -32,9 +32,9 @@ class Splash extends Component {
           </div>
         );
       case "New":
-        return <NewJoin new="true" />;
+        return <NewJoin new={true} />;
       case "Join":
-        return <NewJoin new="false" />;
+        return <NewJoin new={false} />;
       default:
         return <p>Guess you splash broke it.</p>;
     }

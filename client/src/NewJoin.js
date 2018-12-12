@@ -16,18 +16,18 @@ class NewJoin extends Component {
   createGame() {
     console.log("hit backend to create game:");
     console.log(
-      `gamename: ${this.props.gameName}, email: ${
-        this.props.playerEmail
-      }, playerName: ${this.props.playerName}`
+      `gamename: ${this.state.gameName}, email: ${
+        this.state.playerEmail
+      }, playerName: ${this.state.playerName}`
     );
   }
 
   joinGame() {
-    console.log("hit backend to create game:");
+    console.log("hit backend to join game:");
     console.log(
-      `gamename: ${this.props.gameName}, email: ${
-        this.props.playerEmail
-      }, playerName: ${this.props.playerName}`
+      `gamename: ${this.state.gameName}, email: ${
+        this.state.playerEmail
+      }, playerName: ${this.state.playerName}`
     );
   }
 
