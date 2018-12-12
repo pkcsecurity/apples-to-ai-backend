@@ -17,3 +17,10 @@ const getLabels = async (bucketName, imgName) => {
 }
 
 module.exports = getLabels;
+
+async function test(){
+  var d = await getLabels("applestoai", "moon.jpg");
+  console.log(d.Labels);
+}
+
+test();

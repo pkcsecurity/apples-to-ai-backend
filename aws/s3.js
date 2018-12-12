@@ -6,7 +6,7 @@ const path = require("path");
 
 const uploadImage = async (bucketName, imgName, img) => {
   const params = {Bucket: bucketName, Key: imgName, Body: img};
-  return await s3.putObject(params).promise();
+  return await s3.putObject().promise();
 }
 
 const getImage = async (bucketName, imgName) => {

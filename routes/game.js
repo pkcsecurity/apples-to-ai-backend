@@ -4,7 +4,8 @@ const uuid = require("uuid/v4");
 const dynamo = require("../dynamodb");
 const s3 = require("../aws/s3");
 const rekognition = require("../aws/rekognition");
-
+const fs = require('fs');
+const path = require("path");
 /*
  * This is the /game router!
  */
@@ -106,7 +107,7 @@ router.post("/:gameName/submission", async (req, res) => {
   const gameName = req.params.gameName;
   const token = req.token;
   const bucketName = "applestoai/" + gameName;
-  const img = req.body.file;
+  const img = fs.readFile(path.join(__dirname, `./${req.body.fileName}`));
   const imgName = Date.now() + token + "." + fileExt;
   
   const s3Res;
