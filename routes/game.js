@@ -108,11 +108,24 @@ router.post("/:gameName/submission", async (req, res) => {
   const bucketName = "applestoai/" + gameName;
   const img = req.body.file;
   const imgName = Date.now() + token + "." + fileExt;
-  const s3Res = await s3.uploadImage(bucketName, imgName, img);
+  
+  const s3Res;
+  try{
+    s3Res = await s3.uploadImage(bucketName, imgName, img);
+  }catch(err){
+    console.log(err);
+    res.status(400).send("Image submission failed.");
+  }
 
   // Send s3 URL to rekog
-  const rekogRes = await rekognition.getLabels(bucketName, imgName);
-
+  const rekogRes;
+  try{
+    rekcogRes = await rekognition.getLabels(bucketName, imgName);
+  }catch(err){
+    console.log(err);
+    res.status(400).send("Image not accessible.");
+  }
+  
   // Parse rekRes into vetcor of labels
   const rekogData = rekRes.Labels.map(function (item) {
     return item.Name;
