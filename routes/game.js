@@ -79,21 +79,26 @@ router.post("/:gameName/word", async (req, res) => {
   if (!game) {
     return res.status(404).send("No game of that name.")
   }
-  await dynamo.addRoundLeaderWord(gameName, req.token, req.body.word);
+  try {
+    await dynamo.addRoundLeaderWord(gameName, req.token, req.body.word);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
   res.end();
 });
 
- // POST player uploads their image submission for the round
- // * Expects a JSON body like:
- // * {
- // *   fileName: "image.jpg"
- // *   file: <image object>
- // * }
- // * Responds with 200
+// POST player uploads their image submission for the round
+// * Expects a JSON body like:
+// * {
+// *   fileName: "image.jpg"
+// *   file: <image object>
+// * }
+// * Responds with 200
 router.post("/:gameName/submission", async (req, res) => {
   const fileName = req.body.fileName;
   const fileExt = fileName.slice((fileName.lastIndexOf(".") - 1 >>> 0) + 2);
-  if(fileExt !== "jpg" || fileExt !== "png"){
+  if (fileExt !== "jpg" || fileExt !== "png") {
     res.status(400).send("Please submit image in jpg or png format.");
   }
 
@@ -109,7 +114,7 @@ router.post("/:gameName/submission", async (req, res) => {
   const rekogRes = await rekognition.getLabels(bucketName, imgName);
 
   // Parse rekRes into vetcor of labels
-  const rekogData = rekRes.Labels.map(function(item){
+  const rekogData = rekRes.Labels.map(function (item) {
     return item.Name;
   });
   await dynamo.addPlayerImageSubmission(gameName, token, bucketName + "/" + imgName, rekogData);
