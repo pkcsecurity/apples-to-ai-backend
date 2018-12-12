@@ -11,7 +11,8 @@ class Step0 extends Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  submit() {
+  submit(event) {
+    event.preventDefault();
     console.log("hit backend with the chosen word for the round");
     this.props.nextStep();
   }

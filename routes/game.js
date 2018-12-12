@@ -4,7 +4,7 @@ const uuid = require("uuid/v4");
 const dynamo = require("../dynamodb");
 const s3 = require("../aws/s3");
 const rekognition = require("../aws/rekognition");
-const fs = require('fs');
+const fs = require("fs");
 const path = require("path");
 /*
  * This is the /game router!
@@ -30,11 +30,16 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
   const game = await dynamo.getGameState(req.body.gameName);
   if (game) {
-    console.log(game)
-    return res.status(400).send("Game with that name already exists")
+    console.log(game);
+    return res.status(400).send("Game with that name already exists");
   }
   const token = uuid();
-  dynamo.initNewGame(req.body.gameName, token, req.body.ownerEmail, req.body.maxScore);
+  dynamo.initNewGame(
+    req.body.gameName,
+    token,
+    req.body.ownerEmail,
+    req.body.maxScore
+  );
   res.send({ token: token });
 });
 
@@ -50,7 +55,7 @@ router.post("/:gameName/player", async (req, res) => {
   const gameName = req.params.gameName;
   const game = await dynamo.getGameState(gameName);
   if (!game) {
-    return res.status(404).send("No game of that name.")
+    return res.status(404).send("No game of that name.");
   }
   const token = uuid();
   await dynamo.addPlayerToGame(gameName, token, req.body.email);
@@ -78,7 +83,7 @@ router.post("/:gameName/word", async (req, res) => {
   const gameName = req.params.gameName;
   const game = await dynamo.getGameState(gameName);
   if (!game) {
-    return res.status(404).send("No game of that name.")
+    return res.status(404).send("No game of that name.");
   }
   try {
     await dynamo.addRoundLeaderWord(gameName, req.token, req.body.word);
@@ -107,30 +112,35 @@ router.post("/:gameName/submission", async (req, res) => {
   // Upload image to s3
   const gameName = req.params.gameName;
   const token = req.token;
-  const bucketName = "applestoai/" + gameName;
+  const bucketName = "applestoaisubmissions/" + gameName;
   const img = fs.readFile(path.join(__dirname, `./${req.body.fileName}`));
   const imgName = Date.now() + token + ".jpg";
 
-  try{
+  try {
     await s3.uploadImage(bucketName, imgName, img);
-  }catch(err){
+  } catch (err) {
     console.log(err);
     res.status(400).send("Image submission failed.");
   }
 
   // Send s3 URL to rekog
-  try{
+  try {
     rekcogRes = await rekognition.getLabels(bucketName, imgName);
-  }catch(err){
+  } catch (err) {
     console.log(err);
     res.status(400).send("Image not accessible.");
   }
-  
+
   // Parse rekRes into vetcor of labels
-  let rekogData = rekRes.Labels.map(function (item) {
+  let rekogData = rekRes.Labels.map(function(item) {
     return item.Name;
   });
-  await dynamo.addPlayerImageSubmission(gameName, token, bucketName + "/" + imgName, rekogData);
+  await dynamo.addPlayerImageSubmission(
+    gameName,
+    token,
+    bucketName + "/" + imgName,
+    rekogData
+  );
   res.end();
 });
 
@@ -145,9 +155,13 @@ router.post("/:gameName/choice", async (req, res) => {
   const gameName = req.params.gameName;
   const game = await dynamo.getGameState(gameName);
   if (!game) {
-    return res.status(404).send("No game of that name.")
+    return res.status(404).send("No game of that name.");
   }
-  await dynamo.addRoundLeaderChoice(gameName, req.token, req.body.winningSubmissionIndex);
+  await dynamo.addRoundLeaderChoice(
+    gameName,
+    req.token,
+    req.body.winningSubmissionIndex
+  );
   res.end();
 });
 

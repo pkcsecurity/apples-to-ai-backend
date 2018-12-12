@@ -13,7 +13,8 @@ class NewJoin extends Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  createGame() {
+  createGame(event) {
+    event.preventDefault();
     console.log("hit backend to create game:");
     console.log(
       `gamename: ${this.state.gameName}, email: ${
@@ -23,7 +24,8 @@ class NewJoin extends Component {
     this.props.goToLobby();
   }
 
-  joinGame() {
+  joinGame(event) {
+    event.preventDefault();
     console.log("hit backend to join game:");
     console.log(
       `gamename: ${this.state.gameName}, email: ${

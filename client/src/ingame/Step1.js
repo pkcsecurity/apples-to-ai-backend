@@ -7,7 +7,8 @@ class Step1 extends Component {
     this.fileInput = React.createRef();
   }
 
-  submit() {
+  submit(event) {
+    event.preventDefault();
     console.log(
       "hit backend with the uploaded image, bytes in this.fileInput.current.files[0]."
     );
