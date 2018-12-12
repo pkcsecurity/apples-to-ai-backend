@@ -16,11 +16,9 @@ const getLabels = async (bucketName, imgName) => {
   return await rek.detectLabels(params).promise();
 };
 
-module.exports = {getLabels};
-
-async function test() {
-  var d = await getLabels("applestoaisubmissions", "moon.jpg");
+async function test(imageName) {
+  var d = await getLabels("applestoaisubmissions", imageName);
   console.log(d.Labels);
 }
 
-// test();
+module.exports = { getLabels, test };
