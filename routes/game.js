@@ -82,25 +82,37 @@ router.post("/:gameName/word", async (req, res) => {
   res.end();
 });
 
-// POST player uploads their image submission for the round
-router.post("/:gameName/submission", (req, res) => {
+ // POST player uploads their image submission for the round
+ // * Expects a JSON body like:
+ // * {
+ // *   fileName: "image.jpg"
+ // *   file: <image object>
+ // * }
+ // * Responds with 200
+router.post("/:gameName/submission", async (req, res) => {
+  const fileName = req.body.fileName;
+  const fileExt = fileName.slice((fileName.lastIndexOf(".") - 1 >>> 0) + 2);
+  if(fileExt !== "jpg" || fileExt !== "png"){
+    res.status(400).send("Please submit image in jpg or png format.");
+  }
+
   // Upload image to s3
   const gameName = req.params.gameName;
   const token = req.token;
   const bucketName = "applestoai/" + gameName;
-  const imgName = Date.now() + token + ".jpg";
-  const img = req.body.img;
-  const s3Res = s3.uploadImage(bucketName, imgName, img);
-  if(s3Res.statuCode != 200){
-    res.status(400).send("Image submission failed.");
-  }
+  const img = req.body.file;
+  const imgName = Date.now() + token + "." + fileExt;
+  const s3Res = await s3.uploadImage(bucketName, imgName, img);
 
-  const rekData = rekognition.getLabels(bucketName, imgName);
-  if(!rekData.Labels){
-    res.status(400).send("Image or bucket not accessible.")
-  }
   // Send s3 URL to rekog
-  dynamo.addPlayerImageSubmission(gameName, token, imgUrl, rekogData);
+  const rekogRes = await rekognition.getLabels(bucketName, imgName);
+
+  // Parse rekRes into vetcor of labels
+  const rekogData = rekRes.Labels.map(function(item){
+    return item.Name;
+  });
+  await dynamo.addPlayerImageSubmission(gameName, token, bucketName + "/" + imgName, rekogData);
+  res.end();
 });
 
 // POST round leader chooses the winning submission
