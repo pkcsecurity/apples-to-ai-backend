@@ -45,9 +45,6 @@ const getGameState = async gameName => {
   try {
     const resp = await dc.get(params).promise();
     const game = resp.Item;
-    const currentGameState = game.GameState[game.GameState.length - 1];
-
-
     return game;
   } catch (err) {
     console.log(err);
