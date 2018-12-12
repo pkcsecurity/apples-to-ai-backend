@@ -98,17 +98,18 @@ router.post("/:gameName/word", async (req, res) => {
 // * Responds with 200
 router.post("/:gameName/submission", async (req, res) => {
   const fileName = req.body.fileName;
-  const fileExt = fileName.slice((fileName.lastIndexOf(".") - 1 >>> 0) + 2);
-  if (fileExt !== "jpg" || fileExt !== "png") {
-    res.status(400).send("Please submit image in jpg or png format.");
-  }
+  // const fileExt = fileName.slice((fileName.lastIndexOf(".") - 1 >>> 0) + 2);
+  // if (fileExt != "jpg" || fileExt !== "png") {
+  //   res.status(400).send("Please submit image in jpg or png format.");
+  //   return;
+  // }
 
   // Upload image to s3
   const gameName = req.params.gameName;
   const token = req.token;
   const bucketName = "applestoai/" + gameName;
   const img = fs.readFile(path.join(__dirname, `./${req.body.fileName}`));
-  const imgName = Date.now() + token + "." + fileExt;
+  const imgName = Date.now() + token + ".jpg";
 
   try{
     await s3.uploadImage(bucketName, imgName, img);
