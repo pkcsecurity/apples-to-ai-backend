@@ -20,6 +20,7 @@ class NewJoin extends Component {
         this.state.playerEmail
       }, playerName: ${this.state.playerName}`
     );
+    this.props.goToLobby();
   }
 
   joinGame() {
@@ -29,6 +30,7 @@ class NewJoin extends Component {
         this.state.playerEmail
       }, playerName: ${this.state.playerName}`
     );
+    this.props.goToLobby();
   }
 
   componentDidMount() {

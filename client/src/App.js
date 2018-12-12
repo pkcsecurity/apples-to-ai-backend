@@ -12,7 +12,13 @@ class App extends Component {
   renderScreen(screenName) {
     switch (screenName) {
       case "Splash":
-        return <Splash />;
+        return (
+          <Splash
+            goToLobby={() => {
+              this.setState({ currentScreen: "Game" });
+            }}
+          />
+        );
       case "Game":
         return <Game />;
       default:
