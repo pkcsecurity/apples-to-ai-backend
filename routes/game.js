@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const uuid = require("uuid/v4");
 const dynamo = require("../dynamodb");
+const s3 = require("../aws/s3");
+const rekognition = require("../aws/rekognition");
 
 /*
  * This is the /game router!
@@ -80,13 +82,37 @@ router.post("/:gameName/word", async (req, res) => {
   res.end();
 });
 
-// POST player uploads their image submission for the round
-router.post("/:gameName/submission", (req, res) => {
-  // Upload image to s3 (you'll need to construct a filename)
-  // /gameName/datetime-token png/jpg
+ // POST player uploads their image submission for the round
+ // * Expects a JSON body like:
+ // * {
+ // *   fileName: "image.jpg"
+ // *   file: <image object>
+ // * }
+ // * Responds with 200
+router.post("/:gameName/submission", async (req, res) => {
+  const fileName = req.body.fileName;
+  const fileExt = fileName.slice((fileName.lastIndexOf(".") - 1 >>> 0) + 2);
+  if(fileExt !== "jpg" || fileExt !== "png"){
+    res.status(400).send("Please submit image in jpg or png format.");
+  }
+
+  // Upload image to s3
+  const gameName = req.params.gameName;
+  const token = req.token;
+  const bucketName = "applestoai/" + gameName;
+  const img = req.body.file;
+  const imgName = Date.now() + token + "." + fileExt;
+  const s3Res = await s3.uploadImage(bucketName, imgName, img);
+
   // Send s3 URL to rekog
-  // Once you get response, call the function below to save to dynamo
-  dynamo.addPlayerImageSubmission(gameName, req.token, imgUrl, rekogData);
+  const rekogRes = await rekognition.getLabels(bucketName, imgName);
+
+  // Parse rekRes into vetcor of labels
+  const rekogData = rekRes.Labels.map(function(item){
+    return item.Name;
+  });
+  await dynamo.addPlayerImageSubmission(gameName, token, bucketName + "/" + imgName, rekogData);
+  res.end();
 });
 
 // POST round leader chooses the winning submission

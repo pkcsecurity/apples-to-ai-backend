@@ -60,7 +60,7 @@ const addPlayerToGame = async (gameName, token, email) => {
 }
 
 const addPlayerImageSubmission = (gameName, token, imgUrl, rekogData) => {
-  const game = getGameState(gameName);
+  const game = await getGameState(gameName);
   const imgSub = getSubmission(game, token, imgUrl, rekogData);
   game.GameState[game.GameState.length - 1].submissions.push(imgSub);
 }
