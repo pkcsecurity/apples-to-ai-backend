@@ -109,17 +109,15 @@ router.post("/:gameName/submission", async (req, res) => {
   const bucketName = "applestoai/" + gameName;
   const img = fs.readFile(path.join(__dirname, `./${req.body.fileName}`));
   const imgName = Date.now() + token + "." + fileExt;
-  
-  const s3Res;
+
   try{
-    s3Res = await s3.uploadImage(bucketName, imgName, img);
+    await s3.uploadImage(bucketName, imgName, img);
   }catch(err){
     console.log(err);
     res.status(400).send("Image submission failed.");
   }
 
   // Send s3 URL to rekog
-  const rekogRes;
   try{
     rekcogRes = await rekognition.getLabels(bucketName, imgName);
   }catch(err){
@@ -128,7 +126,7 @@ router.post("/:gameName/submission", async (req, res) => {
   }
   
   // Parse rekRes into vetcor of labels
-  const rekogData = rekRes.Labels.map(function (item) {
+  let rekogData = rekRes.Labels.map(function (item) {
     return item.Name;
   });
   await dynamo.addPlayerImageSubmission(gameName, token, bucketName + "/" + imgName, rekogData);

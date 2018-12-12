@@ -27,9 +27,9 @@ const saveGame = async (game) => {
 }
 
 
-const getBlankGameRound = () => {
+const getBlankGameRound = (leaderIndex) => {
   return {
-    leaderIndex: 0,
+    leaderIndex,
     objectWord: null,
     step: 0,
     submissions: []
@@ -44,7 +44,11 @@ const getGameState = async gameName => {
 
   try {
     const resp = await dc.get(params).promise();
-    return resp.Item;
+    const game = resp.Item;
+    const currentGameState = game.GameState[game.GameState.length - 1];
+
+
+    return game;
   } catch (err) {
     console.log(err);
     return null;
@@ -59,8 +63,17 @@ const addPlayerToGame = async (gameName, token, email) => {
 
 const addPlayerImageSubmission = async (gameName, token, imgUrl, rekogData) => {
   const game = await getGameState(gameName);
+  const currentGameState = game.GameState[game.GameState.length - 1];
+  if (!(getPlayerIndexByToken(game, token) !== currentGameState.leaderIndex &&
+    currentGameState.step === 1)) {
+    throw "You are the round leader or this round is not in image submissions step"
+  }
   const imgSub = getSubmission(game, token, imgUrl, rekogData);
-  game.GameState[game.GameState.length - 1].submissions.push(imgSub);
+  currentGameState.submissions.push(imgSub);
+  // If final image submission, update game step
+  if (currentGameState.submissions.length >= (game.Players.length - 1)) {
+    currentGameState.step = 2;
+  }
   await saveGame(game);
 }
 
@@ -79,21 +92,23 @@ const addRoundLeaderChoice = async (gameName, token, winningSubmissionIndex) => 
   const game = getGameState(gameName);
   const currentGameState = game.GameState[game.GameState.length - 1];
 
-  if (getPlayerIndexByToken(game, token) === currentGameState.leaderIndex &&
-    currentGameState.step === 2) {
-    currentGameState.submissions[winningSubmissionIndex].chosen = true;
-    game.Players[currentGameState.submissions[winningSubmissionIndex].playerIndex].score++;
-
-    /// TODO IMPLEMENT NEXT ROUND AND POSSIBLE WIN LOGIC
-
-    // if person who just got point hit max, they win
-    // if not, then create another round
-
-
-    await saveGame(game);
+  if (!(getPlayerIndexByToken(game, token) === currentGameState.leaderIndex &&
+    currentGameState.step === 2)) {
+    throw "You are not the round leader or all submissions aren't yet in for this round"
   }
-  throw "You are not the round leader and cannot set the word, or the word has already been set for this round"
 
+  currentGameState.submissions[winningSubmissionIndex].chosen = true;
+  game.Players[currentGameState.submissions[winningSubmissionIndex].playerIndex].score++;
+
+  if (game.Players[currentGameState.submissions[winningSubmissionIndex].playerIndex].score >= game.maxScore) {
+    console.log(`Game over, ${game.Players[currentGameState.submissions[winningSubmissionIndex].playerIndex].email} won!`)
+    game.WinningPlayerIndex = currentGameState.submissions[winningSubmissionIndex].playerIndex;
+  } else {
+    console.log("New round")
+    const leaderIndex = (currentGameState.leaderIndex++) % game.Players.length;
+    game.GameState.push(getBlankGameRound(leaderIndex))
+  }
+  await saveGame(game);
 }
 
 const getSubmission = (game, token, imgUrl, rekogData) => {
