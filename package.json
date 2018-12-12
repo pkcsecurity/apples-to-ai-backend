@@ -25,6 +25,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-bearer-token": "^2.2.0",
+    "fs": "0.0.1-security",
     "morgan": "~1.9.0",
     "uuid": "^3.3.2"
   }

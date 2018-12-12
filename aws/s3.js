@@ -1,10 +1,12 @@
 const AWS = require('aws-sdk');
 AWS.config.update({region: "us-east-1"});
 const s3 = new AWS.S3();
+const fs = require('fs');
+const path = require("path");
 
 const uploadImage = async (bucketName, imgName, img) => {
   const params = {Bucket: bucketName, Key: imgName, Body: img};
-  return await s3.putObject(imgObj).promise();
+  return await s3.putObject(params).promise();
 }
 
 const getImage = async (bucketName, imgName) => {
@@ -22,3 +24,4 @@ module.exports = {
   getImage,
   getImgsOfBucket
 }
+
