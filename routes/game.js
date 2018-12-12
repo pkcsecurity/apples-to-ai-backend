@@ -26,13 +26,14 @@ router.get("/", (req, res) => {
  * Responds with the following body:
  * { token: "" }
  */
-router.post("/", (req, res) => {
-  const game = dynamo.getGameState(req.gameName);
+router.post("/", async (req, res) => {
+  const game = await dynamo.getGameState(req.body.gameName);
   if (game) {
-    res.status(400).send("Game with that name already exists")
+    console.log(game)
+    return res.status(400).send("Game with that name already exists")
   }
   const token = uuid();
-  dynamo.initNewGame(req.gameName, token, req.ownerEmail, req.maxScore);
+  dynamo.initNewGame(req.body.gameName, token, req.body.ownerEmail, req.body.maxScore);
   res.send({ token: token });
 });
 
@@ -48,10 +49,10 @@ router.post("/:gameName/player", async (req, res) => {
   const gameName = req.params.gameName;
   const game = await dynamo.getGameState(gameName);
   if (!game) {
-    res.status(404).send("No game of that name.")
+    return res.status(404).send("No game of that name.")
   }
   const token = uuid();
-  await dynamo.addPlayerToGame(gameName, token, req.email);
+  await dynamo.addPlayerToGame(gameName, token, req.body.email);
   res.send({ token: token });
 });
 
@@ -59,7 +60,7 @@ router.post("/:gameName/player", async (req, res) => {
 router.get("/:gameName", async (req, res) => {
   const game = await dynamo.getGameState(req.params.gameName);
   if (game) {
-    res.send(game.GameState);
+    res.send(game);
   } else {
     res.status(404).end();
   }
@@ -76,9 +77,9 @@ router.post("/:gameName/word", async (req, res) => {
   const gameName = req.params.gameName;
   const game = await dynamo.getGameState(gameName);
   if (!game) {
-    res.status(404).send("No game of that name.")
+    return res.status(404).send("No game of that name.")
   }
-  await dynamo.addRoundLeaderWord(gameName, req.token, req.word);
+  await dynamo.addRoundLeaderWord(gameName, req.token, req.body.word);
   res.end();
 });
 
@@ -115,14 +116,20 @@ router.post("/:gameName/submission", async (req, res) => {
   res.end();
 });
 
-// POST round leader chooses the winning submission
+/* POST round leader chooses the winning submission
+ * Expects a JSON body like:
+ * {
+ *   winningSubmissionIndex: 1
+ * }
+ * Responds with 200
+ */
 router.post("/:gameName/choice", async (req, res) => {
   const gameName = req.params.gameName;
   const game = await dynamo.getGameState(gameName);
   if (!game) {
-    res.status(404).send("No game of that name.")
+    return res.status(404).send("No game of that name.")
   }
-  await dynamo.addRoundLeaderChoice(gameName, req.token, req.word);
+  await dynamo.addRoundLeaderChoice(gameName, req.token, req.body.winningSubmissionIndex);
   res.end();
 });
 

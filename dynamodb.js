@@ -7,9 +7,8 @@ const initNewGame = async (name, ownerToken, ownerEmail, maxScore) => {
     GameName: name,
     GameOwner: ownerToken,
     Players: [{ email: ownerEmail, token: ownerToken, score: 0 }],
-    CurrentPlayerIndex: 0,
     MaxScore: maxScore,
-    WinningPlayerIndex: null,
+    WinningPlayerIndex: -1,
     StartDateTime: Date.now(),
     GameState: [
       getBlankGameRound(0)
@@ -24,7 +23,6 @@ const saveGame = async (game) => {
     TableName: "apples-to-ai",
     Item: game
   };
-
   return await dc.put(params).promise();
 }
 
@@ -63,20 +61,41 @@ const addPlayerImageSubmission = (gameName, token, imgUrl, rekogData) => {
   const game = await getGameState(gameName);
   const imgSub = getSubmission(game, token, imgUrl, rekogData);
   game.GameState[game.GameState.length - 1].submissions.push(imgSub);
+  await saveGame(game);
 }
 
-
-const addRoundLeaderWord = (gameName, token, email) => {
-
-
+const addRoundLeaderWord = (gameName, token, word) => {
+  const game = getGameState(gameName);
+  const currentGameState = game.GameState[game.GameState.length - 1];
+  if (getPlayerIndexByToken(token) === currentGameState.leaderIndex &&
+    currentGameState.step === 0) {
+    currentGameState.objectWord = word;
+    currentGameState.step = 1;
+    await saveGame(game);
+  }
+  throw "You are not the round leader and cannot set the word, or the word has already been set for this round"
 }
 
-const addRoundLeaderChoice = (gameName, token, email) => {
+const addRoundLeaderChoice = (gameName, token, winningSubmissionIndex) => {
+  const game = getGameState(gameName);
+  const currentGameState = game.GameState[game.GameState.length - 1];
 
+  if (getPlayerIndexByToken(token) === currentGameState.leaderIndex &&
+    currentGameState.step === 2) {
+    currentGameState.submissions[winningSubmissionIndex].chosen = true;
+    game.Players[currentGameState.submissions[winningSubmissionIndex].playerIndex].score++;
+
+    /// TODO IMPLEMENT NEXT ROUND AND POSSIBLE WIN LOGIC
+
+    // if person who just got point hit max, they win
+    // if not, then create another round
+
+
+    await saveGame(game);
+  }
+  throw "You are not the round leader and cannot set the word, or the word has already been set for this round"
 
 }
-
-
 
 const getSubmission = (game, token, imgUrl, rekogData) => {
   const wordFoundInImage = false; // FIXME PARSE rekogData to see if 
