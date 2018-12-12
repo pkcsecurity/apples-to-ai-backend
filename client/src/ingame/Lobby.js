@@ -1,16 +1,26 @@
 import React, { Component } from "react";
 
 class Lobby extends Component {
-  state = { welcomeBanner: "" };
+  constructor(props) {
+    super(props);
+    this.startGame = this.startGame.bind(this);
+    this.state = {};
+  }
 
-  componentDidMount() {
-    console.log("do a thing");
+  startGame() {
+    console.log("hit backend to start game");
+    this.props.nextStep();
   }
 
   render() {
-    return (
+    return this.props.owner ? (
       <div className="Lobby">
-        <p>A thing</p>
+        <button onClick={this.startGame}>Start Game!</button>
+      </div>
+    ) : (
+      <div className="Lobby">
+        <p>Waiting for owner to start the game</p>
+        <button onClick={this.props.nextStep}>Next Step</button>
       </div>
     );
   }

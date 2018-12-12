@@ -1,16 +1,41 @@
 import React, { Component } from "react";
 
 class Step0 extends Component {
-  state = { welcomeBanner: "" };
+  constructor(props) {
+    super(props);
+    this.submit = this.submit.bind(this);
+    this.state = { word: "" };
+  }
 
-  componentDidMount() {
-    console.log("do a thing");
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  submit() {
+    console.log("hit backend with the chosen word for the round");
+    this.props.nextStep();
   }
 
   render() {
-    return (
+    return this.props.owner ? (
       <div className="Step0">
-        <p>A thing</p>
+        <form onSubmit={this.submit}>
+          <label>
+            Word
+            <input
+              name="word"
+              type="text"
+              value={this.state.word}
+              onChange={this.handleChange}
+            />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+    ) : (
+      <div className="Step0">
+        <p>Waiting for owner to choose a word</p>
+        <button onClick={this.props.nextStep}>Next Step</button>
       </div>
     );
   }

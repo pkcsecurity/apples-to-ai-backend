@@ -57,30 +57,29 @@ const addPlayerToGame = async (gameName, token, email) => {
   await saveGame(game);
 }
 
-const addPlayerImageSubmission = (gameName, token, imgUrl, rekogData) => {
+const addPlayerImageSubmission = async (gameName, token, imgUrl, rekogData) => {
   const game = await getGameState(gameName);
   const imgSub = getSubmission(game, token, imgUrl, rekogData);
   game.GameState[game.GameState.length - 1].submissions.push(imgSub);
   await saveGame(game);
 }
 
-const addRoundLeaderWord = (gameName, token, word) => {
-  const game = getGameState(gameName);
+const addRoundLeaderWord = async (gameName, token, word) => {
+  const game = await getGameState(gameName);
   const currentGameState = game.GameState[game.GameState.length - 1];
-  if (getPlayerIndexByToken(token) === currentGameState.leaderIndex &&
-    currentGameState.step === 0) {
-    currentGameState.objectWord = word;
-    currentGameState.step = 1;
-    await saveGame(game);
+  if (!(getPlayerIndexByToken(game, token) === currentGameState.leaderIndex && currentGameState.step === 0)) {
+    throw "You are not the round leader and cannot set the word, or the word has already been set for this round"
   }
-  throw "You are not the round leader and cannot set the word, or the word has already been set for this round"
+  currentGameState.objectWord = word;
+  currentGameState.step = 1;
+  await saveGame(game);
 }
 
-const addRoundLeaderChoice = (gameName, token, winningSubmissionIndex) => {
+const addRoundLeaderChoice = async (gameName, token, winningSubmissionIndex) => {
   const game = getGameState(gameName);
   const currentGameState = game.GameState[game.GameState.length - 1];
 
-  if (getPlayerIndexByToken(token) === currentGameState.leaderIndex &&
+  if (getPlayerIndexByToken(game, token) === currentGameState.leaderIndex &&
     currentGameState.step === 2) {
     currentGameState.submissions[winningSubmissionIndex].chosen = true;
     game.Players[currentGameState.submissions[winningSubmissionIndex].playerIndex].score++;
