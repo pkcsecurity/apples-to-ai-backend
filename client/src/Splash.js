@@ -5,17 +5,16 @@ class Splash extends Component {
   constructor(props) {
     super(props);
     this.newGame = this.newGame.bind(this);
-    console.log(this.state.screenName);
     this.joinGame = this.joinGame.bind(this);
     this.state = { currentScreen: "Splash" };
   }
 
   newGame() {
-    console.log("new");
+    this.setState({ currentScreen: "New" });
   }
 
   joinGame() {
-    console.log("join");
+g    this.setState({ currentScreen: "Join" });
   }
 
   componentDidMount() {
@@ -23,10 +22,8 @@ class Splash extends Component {
   }
 
   render() {
-    console.log(this.state.screenName);
-    switch (this.state.screenName) {
+    switch (this.state.currentScreen) {
       case "Splash":
-        console.log(this.state.screenName);
         return (
           <div className="Splash">
             <h2>New game or join?</h2>
