@@ -14,7 +14,7 @@ class Splash extends Component {
   }
 
   joinGame() {
-g    this.setState({ currentScreen: "Join" });
+    this.setState({ currentScreen: "Join" });
   }
 
   componentDidMount() {
