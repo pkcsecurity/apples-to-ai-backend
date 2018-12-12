@@ -6,7 +6,7 @@ import Game from "./Game.js";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { currentScreen: "Splash" };
+    this.state = { currentScreen: "Splash", gameName: "", playerToken: "" };
   }
 
   renderScreen(screenName) {
@@ -14,13 +14,22 @@ class App extends Component {
       case "Splash":
         return (
           <Splash
-            goToLobby={() => {
-              this.setState({ currentScreen: "Game" });
+            goToLobby={(gameName, playerToken) => {
+              this.setState({
+                currentScreen: "Game",
+                gameName: gameName,
+                playerToken: playerToken
+              });
             }}
           />
         );
       case "Game":
-        return <Game />;
+        return (
+          <Game
+            gameName={this.state.gameName}
+            playerToken={this.state.playerToken}
+          />
+        );
       default:
         return <p>Guess you broke it.</p>;
     }
