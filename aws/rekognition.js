@@ -16,6 +16,4 @@ const getLabels = async (bucketName, imgName) => {
   return await rek.detectLabels(params).promise();
 }
 
-module.exports = {
-  getLabels
-}
+module.exports = getLabels;
