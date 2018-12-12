@@ -112,9 +112,9 @@ router.post("/:gameName/submission", async (req, res) => {
   // Upload image to s3
   const gameName = req.params.gameName;
   const token = req.token;
-  const bucketName = "applestoaisubmissions/" + gameName;
+  const bucketName = "applestoaisubmissions";
   const img = fs.readFile(path.join(__dirname, `../${req.body.fileName}`));
-  const imgName = Date.now() + token + ".jpg";
+  const imgName =  gameName + "/" + Date.now() + token + ".jpg";
 
   try {
     await s3.uploadImage(bucketName, imgName, img);
@@ -132,7 +132,7 @@ router.post("/:gameName/submission", async (req, res) => {
   }
 
   // Parse rekRes into vetcor of labels
-  let rekogData = rekRes.Labels.map(function(item) {
+  let rekogData = rekcogRes.Labels.map(function(item) {
     return item.Name;
   });
   await dynamo.addPlayerImageSubmission(
