@@ -116,16 +116,17 @@ router.post("/:gameName/submission", async (req, res) => {
   const img = fs.readFile(path.join(__dirname, `../${req.body.fileName}`));
   const imgName =  gameName + "/" + Date.now() + token + ".jpg";
 
-  try {
-    await s3.uploadImage(bucketName, imgName, img);
-  } catch (err) {
-    console.log(err);
-    res.status(400).send("Image submission failed.");
-  }
+  // try {
+  //   await s3.uploadImage(bucketName, imgName, img);
+  // } catch (err) {
+  //   console.log(err);
+  //   res.status(400).send("Image submission failed.");
+  // }
 
   // Send s3 URL to rekog
+  let rekcogRes;
   try {
-    rekcogRes = await rekognition.getLabels(bucketName, imgName);
+    rekcogRes = await rekognition.getLabels(bucketName, fileName);
   } catch (err) {
     console.log(err);
     res.status(400).send("Image not accessible.");

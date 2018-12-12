@@ -109,7 +109,8 @@ const addRoundLeaderChoice = async (gameName, token, winningSubmissionIndex) => 
 }
 
 const getSubmission = (game, token, imgUrl, rekogData) => {
-  const wordFoundInImage = false; // FIXME PARSE rekogData to see if 
+  const currentState = game.GameState[game.GameState.length - 1];
+  const wordFoundInImage = rekogData.indexOf(currentState.word) != -1 ? true : false;
 
   return {
     imgUrl,
