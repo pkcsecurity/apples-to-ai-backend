@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Splash from "./Splash.js";
+import Game from "./Game.js";
 
 class App extends Component {
   constructor(props) {
@@ -9,10 +10,11 @@ class App extends Component {
   }
 
   renderScreen(screenName) {
-    console.log(`renderScreen got ${screenName}`);
     switch (screenName) {
       case "Splash":
         return <Splash />;
+      case "Game":
+        return <Game />;
       default:
         return <p>Guess you broke it.</p>;
     }
