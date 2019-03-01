@@ -16,5 +16,8 @@ class GameStateBloc {
     });
   }
 
-  void dispose() {}
+  void dispose() {
+    image.close();
+    results.close();
+  }
 }
