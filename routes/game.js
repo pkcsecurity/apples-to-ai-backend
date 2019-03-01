@@ -6,6 +6,12 @@ const s3 = require("../aws/s3");
 const rekognition = require("../aws/rekognition");
 const fs = require("fs");
 const path = require("path");
+
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
+
+const util = require("util");
+
 /*
  * This is the /game router!
  */
@@ -14,6 +20,41 @@ const path = require("path");
 router.get("/", (req, res) => {
   res.send(
     "Hello world! Ready to throw some apples at an AI to see what sticks?"
+  );
+});
+
+// MVP Hackathon of Regrets GOOOO
+// Expects a multipart/form-data request containing a single image under the key `photo`
+// Returns the JSON response from Rekog
+router.post("/rekog", upload.single("photo"), async (req, res) => {
+  // Upload image to s3
+  const bucketName = "applestoaisubmissions";
+  const imgName = "mvp/" + Date.now() + ".jpg";
+
+  console.log(`Got ${util.inspect(req.file)}`);
+
+  try {
+    await s3.uploadImage(bucketName, imgName, req.file.buffer);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Image submission failed.");
+  }
+
+  // Send s3 URL to rekog
+  let rekogRes;
+  try {
+    rekogRes = await rekognition.getLabels(bucketName, imgName);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Image not accessible.");
+  }
+
+  console.log(`\nGot rekog response!\n${util.inspect(rekogRes)}\n`);
+  res.json(
+    rekogRes.Labels.map(function(item) {
+      delete item.Instances;
+      return item;
+    })
   );
 });
 
@@ -95,55 +136,47 @@ router.post("/:gameName/word", async (req, res) => {
 });
 
 // POST player uploads their image submission for the round
-// * Expects a JSON body like:
-// * {
-// *   fileName: "image.jpg"
-// *   file: <image object>
-// * }
+// * Expects a multipart/form-data file upload
 // * Responds with 200
-router.post("/:gameName/submission", async (req, res) => {
-  const fileName = req.body.fileName;
-  // const fileExt = fileName.slice((fileName.lastIndexOf(".") - 1 >>> 0) + 2);
-  // if (fileExt != "jpg" || fileExt !== "png") {
-  //   res.status(400).send("Please submit image in jpg or png format.");
-  //   return;
-  // }
+router.post(
+  "/:gameName/submission",
+  upload.single("photo"),
+  async (req, res) => {
+    // Upload image to s3
+    const gameName = req.params.gameName;
+    const token = req.token;
+    const bucketName = "applestoaisubmissions";
+    const imgName = gameName + "/" + Date.now() + token + ".jpg";
 
-  // Upload image to s3
-  const gameName = req.params.gameName;
-  const token = req.token;
-  const bucketName = "applestoaisubmissions";
-  const img = fs.readFile(path.join(__dirname, `../${req.body.fileName}`));
-  const imgName =  gameName + "/" + Date.now() + token + ".jpg";
+    try {
+      await s3.uploadImage(bucketName, imgName, req.file.buffer);
+    } catch (err) {
+      console.log(err);
+      res.status(400).send("Image submission failed.");
+    }
 
-  // try {
-  //   await s3.uploadImage(bucketName, imgName, img);
-  // } catch (err) {
-  //   console.log(err);
-  //   res.status(400).send("Image submission failed.");
-  // }
+    // Send s3 URL to rekog
+    let rekogRes;
+    try {
+      rekogRes = await rekognition.getLabels(bucketName, imgName);
+    } catch (err) {
+      console.log(err);
+      res.status(400).send("Image not accessible.");
+    }
 
-  // Send s3 URL to rekog
-  let rekcogRes;
-  try {
-    rekcogRes = await rekognition.getLabels(bucketName, fileName);
-  } catch (err) {
-    console.log(err);
-    res.status(400).send("Image not accessible.");
+    console.log(`\nGot rekog response!\n${util.inspect(rekogRes)}\n`);
+    res.end(rekogRes);
+    // Parse rekRes into vetcor of labels
+    //    let rekogData = rekogRes.Labels.map(item => item.Name);
+    //    await dynamo.addPlayerImageSubmission(
+    //      gameName,
+    //      token,
+    //      bucketName + "/" + imgName,
+    //      rekogData
+    //    );
+    //res.end();
   }
-
-  // Parse rekRes into vetcor of labels
-  let rekogData = rekcogRes.Labels.map(function(item) {
-    return item.Name;
-  });
-  await dynamo.addPlayerImageSubmission(
-    gameName,
-    token,
-    bucketName + "/" + imgName,
-    rekogData
-  );
-  res.end();
-});
+);
 
 /* POST round leader chooses the winning submission
  * Expects a JSON body like:

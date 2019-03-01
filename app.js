@@ -3,8 +3,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const bearerToken = require('express-bearer-token');
- 
+const bearerToken = require("express-bearer-token");
+
 const gameRouter = require("./routes/game");
 
 const app = express();
@@ -17,6 +17,6 @@ app.use(bodyParser.raw({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/game", gameRouter);
+app.use("/", gameRouter);
 
 module.exports = app;

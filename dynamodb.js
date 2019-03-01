@@ -10,31 +10,28 @@ const initNewGame = async (name, ownerToken, ownerEmail, maxScore) => {
     MaxScore: maxScore,
     WinningPlayerIndex: -1,
     StartDateTime: Date.now(),
-    GameState: [
-      getBlankGameRound(0)
-    ]
+    GameState: [getBlankGameRound(0)]
   };
 
   await saveGame(game);
 };
 
-const saveGame = async (game) => {
+const saveGame = async game => {
   const params = {
     TableName: "apples-to-ai",
     Item: game
   };
   return await dc.put(params).promise();
-}
+};
 
-
-const getBlankGameRound = (leaderIndex) => {
+const getBlankGameRound = leaderIndex => {
   return {
     leaderIndex,
     objectWord: null,
     step: 0,
     submissions: []
-  }
-}
+  };
+};
 
 const getGameState = async gameName => {
   const params = {
@@ -56,61 +53,91 @@ const addPlayerToGame = async (gameName, token, email) => {
   const game = await getGameState(gameName);
   game.Players.push({ email, token, score: 0 });
   await saveGame(game);
-}
+};
 
 const addPlayerImageSubmission = async (gameName, token, imgUrl, rekogData) => {
   const game = await getGameState(gameName);
   const currentGameState = game.GameState[game.GameState.length - 1];
-  if (!(getPlayerIndexByToken(game, token) !== currentGameState.leaderIndex &&
-    currentGameState.step === 1)) {
-    throw "You are the round leader or this round is not in image submissions step"
+  if (
+    !(
+      getPlayerIndexByToken(game, token) !== currentGameState.leaderIndex &&
+      currentGameState.step === 1
+    )
+  ) {
+    throw "You are the round leader or this round is not in image submissions step";
   }
   const imgSub = getSubmission(game, token, imgUrl, rekogData);
   currentGameState.submissions.push(imgSub);
   // If final image submission, update game step
-  if (currentGameState.submissions.length >= (game.Players.length - 1)) {
+  if (currentGameState.submissions.length >= game.Players.length - 1) {
     currentGameState.step = 2;
   }
   await saveGame(game);
-}
+};
 
 const addRoundLeaderWord = async (gameName, token, word) => {
   const game = await getGameState(gameName);
   const currentGameState = game.GameState[game.GameState.length - 1];
-  if (!(getPlayerIndexByToken(game, token) === currentGameState.leaderIndex && currentGameState.step === 0)) {
-    throw "You are not the round leader and cannot set the word, or the word has already been set for this round"
+  if (
+    !(
+      getPlayerIndexByToken(game, token) === currentGameState.leaderIndex &&
+      currentGameState.step === 0
+    )
+  ) {
+    throw "You are not the round leader and cannot set the word, or the word has already been set for this round";
   }
   currentGameState.objectWord = word;
   currentGameState.step = 1;
   await saveGame(game);
-}
+};
 
-const addRoundLeaderChoice = async (gameName, token, winningSubmissionIndex) => {
+const addRoundLeaderChoice = async (
+  gameName,
+  token,
+  winningSubmissionIndex
+) => {
   const game = getGameState(gameName);
   const currentGameState = game.GameState[game.GameState.length - 1];
 
-  if (!(getPlayerIndexByToken(game, token) === currentGameState.leaderIndex &&
-    currentGameState.step === 2)) {
-    throw "You are not the round leader or all submissions aren't yet in for this round"
+  if (
+    !(
+      getPlayerIndexByToken(game, token) === currentGameState.leaderIndex &&
+      currentGameState.step === 2
+    )
+  ) {
+    throw "You are not the round leader or all submissions aren't yet in for this round";
   }
 
   currentGameState.submissions[winningSubmissionIndex].chosen = true;
-  game.Players[currentGameState.submissions[winningSubmissionIndex].playerIndex].score++;
+  game.Players[currentGameState.submissions[winningSubmissionIndex].playerIndex]
+    .score++;
 
-  if (game.Players[currentGameState.submissions[winningSubmissionIndex].playerIndex].score >= game.maxScore) {
-    console.log(`Game over, ${game.Players[currentGameState.submissions[winningSubmissionIndex].playerIndex].email} won!`)
-    game.WinningPlayerIndex = currentGameState.submissions[winningSubmissionIndex].playerIndex;
+  if (
+    game.Players[
+      currentGameState.submissions[winningSubmissionIndex].playerIndex
+    ].score >= game.maxScore
+  ) {
+    console.log(
+      `Game over, ${
+        game.Players[
+          currentGameState.submissions[winningSubmissionIndex].playerIndex
+        ].email
+      } won!`
+    );
+    game.WinningPlayerIndex =
+      currentGameState.submissions[winningSubmissionIndex].playerIndex;
   } else {
-    console.log("New round")
-    const leaderIndex = (currentGameState.leaderIndex++) % game.Players.length;
-    game.GameState.push(getBlankGameRound(leaderIndex))
+    console.log("New round");
+    const leaderIndex = currentGameState.leaderIndex++ % game.Players.length;
+    game.GameState.push(getBlankGameRound(leaderIndex));
   }
   await saveGame(game);
-}
+};
 
 const getSubmission = (game, token, imgUrl, rekogData) => {
   const currentState = game.GameState[game.GameState.length - 1];
-  const wordFoundInImage = rekogData.indexOf(currentState.word) != -1 ? true : false;
+  const wordFoundInImage =
+    rekogData.indexOf(currentState.word) != -1 ? true : false;
 
   return {
     imgUrl,
@@ -118,8 +145,8 @@ const getSubmission = (game, token, imgUrl, rekogData) => {
     wordFoundInImage,
     chosen: false,
     rekogData
-  }
-}
+  };
+};
 
 const getPlayerIndexByToken = (game, token) => {
   for (let [index, value] of game.Players.entries()) {
@@ -128,8 +155,7 @@ const getPlayerIndexByToken = (game, token) => {
     }
   }
   throw "Invalid token";
-}
-
+};
 
 module.exports = {
   initNewGame,
@@ -138,4 +164,4 @@ module.exports = {
   addPlayerImageSubmission,
   addRoundLeaderWord,
   addRoundLeaderChoice
-}
+};
