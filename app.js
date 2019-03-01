@@ -3,8 +3,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const bearerToken = require('express-bearer-token');
- 
+const bearerToken = require("express-bearer-token");
+
 const gameRouter = require("./routes/game");
 
 const app = express();
