@@ -17,6 +17,6 @@ app.use(bodyParser.raw({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/game", gameRouter);
+app.use("/", gameRouter);
 
 module.exports = app;
