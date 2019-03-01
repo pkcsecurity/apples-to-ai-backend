@@ -18,7 +18,7 @@ class RicoResult {
             json['Parents'].map((x) => ParentResult.fromJson(x))),
       );
 
-  static List<RicoResultg> resultsFromJson(String str) {
+  static List<RicoResult> resultsFromJson(String str) {
     final jsonData = json.decode(str);
     return List<RicoResult>.from(jsonData.map((x) => RicoResult.fromJson(x)));
   }
