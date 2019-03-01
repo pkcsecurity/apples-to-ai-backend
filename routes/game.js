@@ -23,6 +23,41 @@ router.get("/", (req, res) => {
   );
 });
 
+// MVP Hackathon of Regrets GOOOO
+// Expects a multipart/form-data request containing a single image under the key `photo`
+// Returns the JSON response from Rekog
+router.post("/rekog", upload.single("photo"), async (req, res) => {
+  // Upload image to s3
+  const bucketName = "applestoaisubmissions";
+  const imgName = "mvp/" + Date.now() + ".jpg";
+
+  console.log(`Got ${util.inspect(req.file)}`);
+
+  try {
+    await s3.uploadImage(bucketName, imgName, req.file.buffer);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Image submission failed.");
+  }
+
+  // Send s3 URL to rekog
+  let rekogRes;
+  try {
+    rekogRes = await rekognition.getLabels(bucketName, imgName);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Image not accessible.");
+  }
+
+  console.log(`\nGot rekog response!\n${util.inspect(rekogRes)}\n`);
+  res.json(
+    rekogRes.Labels.map(function(item) {
+      delete item.Instances;
+      return item;
+    })
+  );
+});
+
 /* POST init a new game
  * Expects a JSON body like:
  * {
@@ -130,16 +165,16 @@ router.post(
     }
 
     console.log(`\nGot rekog response!\n${util.inspect(rekogRes)}\n`);
-
+    res.end(rekogRes);
     // Parse rekRes into vetcor of labels
-    let rekogData = rekogRes.Labels.map(item => item.Name);
-    await dynamo.addPlayerImageSubmission(
-      gameName,
-      token,
-      bucketName + "/" + imgName,
-      rekogData
-    );
-    res.end();
+    //    let rekogData = rekogRes.Labels.map(item => item.Name);
+    //    await dynamo.addPlayerImageSubmission(
+    //      gameName,
+    //      token,
+    //      bucketName + "/" + imgName,
+    //      rekogData
+    //    );
+    //res.end();
   }
 );
 
