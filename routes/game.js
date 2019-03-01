@@ -25,7 +25,7 @@ router.get("/", (req, res) => {
 
 // MVP Hackathon of Regrets GOOOO
 // Expects a multipart/form-data request containing a single image under the key `photo`
-// Returns the JSON response from Rekog as {"list": [rekogres1, rekogres2, ...]}
+// Returns the JSON response from Rekog
 router.post("/rekog", upload.single("photo"), async (req, res) => {
   // Upload image to s3
   const bucketName = "applestoaisubmissions";
@@ -50,12 +50,12 @@ router.post("/rekog", upload.single("photo"), async (req, res) => {
   }
 
   console.log(`\nGot rekog response!\n${util.inspect(rekogRes)}\n`);
-  res.json({
-    list: rekogRes.Labels.map(function(item) {
+  res.json(
+    rekogRes.Labels.map(function(item) {
       delete item.Instances;
       return item;
     })
-  });
+  );
 });
 
 /* POST init a new game
