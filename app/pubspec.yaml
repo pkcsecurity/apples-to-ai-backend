@@ -48,6 +48,10 @@ flutter:
     - assets/images/backgrounds/bgCircles.png
     - assets/images/backgrounds/2.0x/bgCircles.png
     - assets/images/backgrounds/3.0x/bgCircles.png
+    - assets/images/icons/iconCamera.png
+    - assets/images/icons/iconUpload.png
+    - assets/images/icons/icon-camera.svg
+    - assets/images/icons/icon-upload.svg
 
 
   fonts:
