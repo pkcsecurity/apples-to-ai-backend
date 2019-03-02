@@ -3,7 +3,7 @@ import 'dart:convert';
 class RicoResult {
   String name;
   double confidence;
-  List<ParentResult> parents;
+  List<String> parents;
 
   RicoResult({
     this.name,
@@ -14,24 +14,12 @@ class RicoResult {
   factory RicoResult.fromJson(Map<String, dynamic> json) => RicoResult(
         name: json['Name'],
         confidence: json['Confidence'].toDouble(),
-        parents: List<ParentResult>.from(
-            json['Parents'].map((x) => ParentResult.fromJson(x))),
+        parents: List<String>.from(
+          json['Parents'].map((x) => x['Name'])),
       );
 
   static List<RicoResult> resultsFromJson(String str) {
     final jsonData = json.decode(str);
     return List<RicoResult>.from(jsonData.map((x) => RicoResult.fromJson(x)));
   }
-}
-
-class ParentResult {
-  String name;
-
-  ParentResult({
-    this.name,
-  });
-
-  factory ParentResult.fromJson(Map<String, dynamic> json) => ParentResult(
-        name: json['Name'],
-      );
 }
