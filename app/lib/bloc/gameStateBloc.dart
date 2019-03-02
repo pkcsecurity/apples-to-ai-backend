@@ -12,6 +12,9 @@ class GameStateBloc {
     image.stream.listen((img) {
       RicoProvider.submitImage(img).then(results.add);
     });
+    results.stream.listen((List<RicoResult> lst) {
+        lst.forEach((RicoResult r) => print(r.name));
+    });
   }
 
   void dispose() {
