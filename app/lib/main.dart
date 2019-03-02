@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:app/bloc/stateBloc.dart';
 import 'package:app/provider/stateProvider.dart';
+import 'package:app/view/splashPage.dart';
 import 'package:app/view/homePage.dart';
 import 'package:app/view/loginPage.dart';
 import 'package:app/view/resultsPage.dart';
@@ -47,6 +48,11 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
         },
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
+            case '/splash':
+              return CustomAnimatedRoute(
+                builder: (_) => SplashPage(),
+                settings: settings,
+              );
             case '/home':
               return CustomAnimatedRoute(
                 builder: (_) => HomePage(),

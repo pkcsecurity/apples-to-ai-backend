@@ -47,12 +47,16 @@ flutter:
     - assets/images/backgrounds/bgCircles.png
     - assets/images/backgrounds/2.0x/bgCircles.png
     - assets/images/backgrounds/3.0x/bgCircles.png
+    - assets/images/backgrounds/bgCirclesSplash.png
+    - assets/images/backgrounds/2.0x/bgCirclesSplash.png
+    - assets/images/backgrounds/3.0x/bgCirclesSplash.png
     - assets/images/icons/iconCamera.png
     - assets/images/icons/iconUpload.png
     - assets/images/icons/icon-camera.svg
     - assets/images/icons/icon-upload.svg
     - assets/images/icons/menu.svg
     - assets/images/icons/icon-taco.svg
+    - assets/images/icons/icon-logo.svg
 
   fonts:
     - family: Dosis
