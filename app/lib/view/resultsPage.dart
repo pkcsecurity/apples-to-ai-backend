@@ -1,22 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'package:app/bloc/gameStateBloc.dart';
+import 'package:app/bloc/stateBloc.dart';
+import 'package:app/model/ricoResultsModel.dart';
+import 'package:app/provider/stateProvider.dart';
 import 'package:app/view/widgets/color.dart';
 
+
 class ResultsPage extends StatelessWidget {
+  StateBloc bloc;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(
-            children: <Widget>[
-              _background(),
-              _iconBackground(context),
-              _titleBar(context),
-              _mainStatistic(context),
-              _mainDescriptor(context),
-              _uploadButton(context),
-            ]
-        )
+    bloc = StateProvider.of(context);
+
+    return StreamBuilder<List<RicoResult>>(
+      stream: bloc.gameStateBloc.resultsStream,
+      initialData: [],
+      builder: (BuildContext context, AsyncSnapshot<List<RicoResult>> snapshot) {
+        String item = '';
+        int confidence = 0;
+        String iconPath = 'assets/images/icons/icon-taco.svg';
+
+        if (snapshot.data.length > 0) {
+          final results = snapshot.data;
+          results.sort((RicoResult a, RicoResult b) {
+            return b.confidence.compareTo(a.confidence);
+          });
+
+          item = results.first.name;
+          confidence = results.first.confidence.floor();
+        }
+
+        return Scaffold(
+            body: Stack(
+                children: <Widget>[
+                  _background(),
+                  _iconBackground(context, iconPath),
+                  _titleBar(context),
+                  _mainStatistic(context, confidence),
+                  _mainDescriptor(context, item),
+                  _uploadButton(context),
+                ]
+            )
+        );
+      },
     );
   }
 
@@ -84,13 +113,12 @@ class ResultsPage extends StatelessWidget {
   }
 
 
-  Widget _mainStatistic(BuildContext context) {
+  Widget _mainStatistic(BuildContext context, int confidence) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
     final width = mediaData.size.width;
 
     final topText = 'With a'.toUpperCase();
-    final confidence = 95;
     final lowerText = 'Confidence level...'.toUpperCase();
 
     return Positioned(
@@ -144,13 +172,12 @@ class ResultsPage extends StatelessWidget {
   }
 
 
-  Widget _mainDescriptor(BuildContext context) {
+  Widget _mainDescriptor(BuildContext context, String item) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
     final width = mediaData.size.width;
 
     final topText = 'Rico says it\'s a:'.toUpperCase();
-    final item = 'Taco';
     final lowerText = 's for everyone!!!';
 
     return Positioned(
@@ -169,7 +196,7 @@ class ResultsPage extends StatelessWidget {
 
   }
 
-  Widget _iconBackground(BuildContext context) {
+  Widget _iconBackground(BuildContext context, String iconPath) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
     final width = mediaData.size.width;
@@ -179,7 +206,7 @@ class ResultsPage extends StatelessWidget {
       left: width * .093,
       right: width * .093,
       child: SvgPicture.asset(
-        'assets/images/icons/icon-taco.svg',
+        iconPath,
         color: Colors.black.withOpacity(0.05),
         width: width * .814,
       ),
@@ -218,6 +245,7 @@ class ResultsPage extends StatelessWidget {
               color: Colors.white,
               onPressed: () {
                 print('Play again pressed...');
+                Navigator.of(context).pushNamed('/home');
               },
             )
         )

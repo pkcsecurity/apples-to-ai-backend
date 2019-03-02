@@ -5,20 +5,27 @@ import 'package:app/model/ricoResultsModel.dart';
 import 'package:app/provider/ricoProvider.dart';
 
 class GameStateBloc {
-  final image = BehaviorSubject<File>(seedValue: null);
-  final results = BehaviorSubject<List<RicoResult>>(seedValue: null);
+  final _image = BehaviorSubject<File>(seedValue: null);
+  final _results = BehaviorSubject<List<RicoResult>>(seedValue: null);
+
+  Stream<List<RicoResult>> get resultsStream => _results.stream;
+  Sink<File> get imageSink => _image.sink;
 
   GameStateBloc() {
-    image.stream.listen((img) {
-      RicoProvider.submitImage(img).then(results.add);
+    _image.stream.listen((img) {
+      RicoProvider.submitImage(img).then(_results.add);
     });
-    results.stream.listen((List<RicoResult> lst) {
+    _results.stream.listen((List<RicoResult> lst) {
         lst.forEach((RicoResult r) => print(r.name));
     });
   }
 
+  void addImage(File file) {
+    _image.add(file);
+  }
+
   void dispose() {
-    image.close();
-    results.close();
+    _image.close();
+    _results.close();
   }
 }

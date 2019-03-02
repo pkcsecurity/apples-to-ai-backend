@@ -132,7 +132,11 @@ class HomePage extends StatelessWidget {
           print('Getting an image...');
           final image = await ImagePicker.pickImage(source: ImageSource.gallery)
               .then((File file) {
-                bloc.gameStateBloc.image.add(file);
+                if (file != null) {
+                  print('Got an image! Uploading...');
+                  Navigator.of(context).pushNamed('/results');
+                  bloc.gameStateBloc.addImage(file);
+                }
           });
         },
       )
