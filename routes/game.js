@@ -27,6 +27,8 @@ router.get("/", (req, res) => {
 // Expects a multipart/form-data request containing a single image under the key `photo`
 // Returns the JSON response from Rekog
 router.post("/rekog", upload.single("photo"), async (req, res) => {
+  console.log(`got content type: ${util.inspect(req.headers)}`);
+
   // Upload image to s3
   const bucketName = "applestoaisubmissions";
   const imgName = "mvp/" + Date.now() + ".jpg";
