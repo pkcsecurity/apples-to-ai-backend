@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:app/bloc/gameStateBloc.dart';
 import 'package:app/bloc/stateBloc.dart';
 import 'package:app/model/ricoResultsModel.dart';
 import 'package:app/provider/stateProvider.dart';
@@ -21,7 +20,7 @@ class ResultsPage extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<List<RicoResult>> snapshot) {
         String item = '';
         int confidence = 0;
-        String iconPath = 'assets/images/icons/icon-taco.svg';
+        String iconPath = toIconPath('');
 
         if (snapshot.data.length > 0) {
           final results = snapshot.data;
@@ -31,6 +30,7 @@ class ResultsPage extends StatelessWidget {
 
           item = results.first.name;
           confidence = results.first.confidence.floor();
+          iconPath = toIconPath(item);
         }
 
         return Scaffold(
@@ -276,4 +276,16 @@ class ResultsPage extends StatelessWidget {
       height: 24.0,
     );
   }
+
+
+  String toIconPath (String item) {
+    List<String> items = ['bowl', 'bread', 'burrito', 'camera', 'cup', 'hotdog', 'taco'];
+
+    if (items.contains(item.toLowerCase())) {
+      return 'assets/images/icons/icon-${item.toLowerCase()}.svg';
+    } else {
+      return 'assets/images/icons/icon-success.svg';
+    }
+  }
+
 }
