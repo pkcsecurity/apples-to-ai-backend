@@ -38,7 +38,7 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
       stateBloc: bloc,
       child: MaterialApp(
         theme: ThemeData(fontFamily: "Dosis"),
-        initialRoute: '/home',
+        initialRoute: '/results',
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
