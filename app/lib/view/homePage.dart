@@ -5,10 +5,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:app/view/widgets/color.dart';
+import 'package:app/bloc/stateBloc.dart';
+import 'package:app/provider/stateProvider.dart';
 
 class HomePage extends StatelessWidget {
+  StateBloc bloc;
+
   @override
   Widget build(BuildContext context) {
+    bloc = StateProvider.of(context);
     return Scaffold(
         body: Stack(
             children: <Widget>[
@@ -127,7 +132,7 @@ class HomePage extends StatelessWidget {
           print('Getting an image...');
           final image = await ImagePicker.pickImage(source: ImageSource.gallery)
               .then((File file) {
-                print(file);
+                bloc.gameStateBloc.image.add(file);
           });
         },
       )
