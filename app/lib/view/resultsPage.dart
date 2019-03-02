@@ -1,37 +1,35 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:app/view/widgets/color.dart';
 
-class HomePage extends StatelessWidget {
+class ResultsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
             children: <Widget>[
-              background(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  _titleWidget(context),
-                  _subTitleWidget(context),
-                  _cameraIcon(context),
-                  _uploadButton(context),
-                ],
-              )
+              _background(),
+              _titleBar(context),
+//              Column(
+//                crossAxisAlignment: CrossAxisAlignment.stretch,
+//                children: <Widget>[
+//                  _titleWidget(context),
+//                  _subTitleWidget(context),
+//                  _cameraIcon(context),
+//                  _uploadButton(context),
+//                ],
+//              )
             ]
         )
     );
   }
 
 
-  Widget background() {
+  Widget _background() {
     return Container(
         decoration: BoxDecoration(
-            color: DarkBackground,
+            color: LightOliveGreen,
             image: DecorationImage(
               image: AssetImage(
                   'assets/images/backgrounds/3.0x/bgCircles.png'),
@@ -40,6 +38,27 @@ class HomePage extends StatelessWidget {
         )
     );
   }
+
+  Widget _titleBar(BuildContext context) {
+    final mediaData = MediaQuery.of(context);
+    final height = mediaData.size.height;
+    final width = mediaData.size.width;
+
+    return SafeArea(
+        child: Container(
+          constraints: BoxConstraints.expand(height: height * .06),
+
+          color: Colors.white,
+          child: Stack(
+            children: <Widget>[
+              Text('Results')
+            ],
+          )
+        )
+    );
+  }
+  
+
 
   Widget _titleWidget(BuildContext context) {
     final mediaData = MediaQuery.of(context);
@@ -102,35 +121,31 @@ class HomePage extends StatelessWidget {
     final width = mediaData.size.width;
 
     return Container(
-      padding: EdgeInsets.only(
-        top: height * .113,
-        right: width * .1665,
-        left: width * .1665,
-      ),
-
-
-      child: RaisedButton(
-        child: Container(
-          //padding: EdgeInsets.symmetric(horizontal: width * 0.66),
-          constraints: BoxConstraints(minHeight: height * .06,),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _buttonText(),
-              _buttonIcon(context),
-            ],
-          )
+        padding: EdgeInsets.only(
+          top: height * .113,
+          right: width * .1665,
+          left: width * .1665,
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
-        color: LightOliveGreen,
-        onPressed: () async {
-          print('Getting an image...');
-          final image = await ImagePicker.pickImage(source: ImageSource.gallery)
-              .then((File file) {
-                print(file);
-          });
-        },
-      )
+
+
+        child: RaisedButton(
+          child: Container(
+            //padding: EdgeInsets.symmetric(horizontal: width * 0.66),
+              constraints: BoxConstraints(minHeight: height * .06,),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  _buttonText(),
+                  _buttonIcon(context),
+                ],
+              )
+          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
+          color: LightOliveGreen,
+          onPressed: () {
+            print('pressed');
+          },
+        )
     );
   }
 

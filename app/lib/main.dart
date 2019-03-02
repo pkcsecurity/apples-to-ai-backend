@@ -4,6 +4,7 @@ import 'package:app/bloc/stateBloc.dart';
 import 'package:app/provider/stateProvider.dart';
 import 'package:app/view/homePage.dart';
 import 'package:app/view/loginPage.dart';
+import 'package:app/view/resultsPage.dart';
 
 void main() {
   runApp(ApplesToAIApp());
@@ -49,6 +50,11 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
             case '/home':
               return CustomAnimatedRoute(
                 builder: (_) => HomePage(),
+                settings: settings,
+              );
+            case '/results':
+              return CustomAnimatedRoute(
+                builder: (_) => ResultsPage(),
                 settings: settings,
               );
             default: // '/login'
