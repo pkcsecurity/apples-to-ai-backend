@@ -57,6 +57,7 @@ flutter:
     - assets/images/icons/menu.svg
     - assets/images/icons/icon-taco.svg
     - assets/images/icons/icon-logo.svg
+    - assets/images/icons/icon-redo.svg
 
   fonts:
     - family: Dosis
