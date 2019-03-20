@@ -22,7 +22,7 @@ class ResultsPage extends StatelessWidget {
         int confidence = 0;
         String iconPath = toIconPath('');
 
-        if (snapshot.data.length > 0) {
+        if (snapshot.data != null && snapshot.data.length > 0) {
           final results = snapshot.data;
           results.sort((RicoResult a, RicoResult b) {
             return b.confidence.compareTo(a.confidence);

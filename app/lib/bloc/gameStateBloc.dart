@@ -14,8 +14,11 @@ class GameStateBloc {
   GameStateBloc() {
     _image.stream.listen((img) {
       RicoProvider.submitImage(img).then((list) {
-        final results = list.removeWhere((RicoResult r) => r.parents.isEmpty);
-        _results.add(results);
+        if (list != null && list.length > 0) {
+          final results = list.removeWhere(
+                  (RicoResult r) => r.parents.isEmpty);
+          _results.add(results);
+        }
       });
     });
     _results.stream.listen((List<RicoResult> lst) {
