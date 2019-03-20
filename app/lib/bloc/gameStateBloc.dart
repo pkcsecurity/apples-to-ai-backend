@@ -6,7 +6,7 @@ import 'package:app/provider/ricoProvider.dart';
 
 class GameStateBloc {
   final _image = BehaviorSubject<File>(seedValue: null);
-  final _results = BehaviorSubject<List<RicoResult>>(seedValue: null);
+  final _results = BehaviorSubject<List<RicoResult>>(seedValue: []);
 
   Stream<List<RicoResult>> get resultsStream => _results.stream;
   Sink<File> get imageSink => _image.sink;
@@ -15,9 +15,9 @@ class GameStateBloc {
     _image.stream.listen((img) {
       RicoProvider.submitImage(img).then((list) {
         if (list != null && list.length > 0) {
-          final results = list.removeWhere(
-                  (RicoResult r) => r.parents.isEmpty);
-          _results.add(results);
+          list.removeWhere((RicoResult r) => r.parents.isEmpty,
+          );
+          _results.add(list);
         }
       });
     });
