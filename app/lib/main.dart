@@ -43,7 +43,7 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: child,
+              child: child,
           );
         },
         onGenerateRoute: (RouteSettings settings) {

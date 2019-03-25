@@ -14,35 +14,87 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bloc = StateProvider.of(context);
-    return Scaffold(
+
+    return _background(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+        ),
+        drawer: Drawer(
+          child: _drawerContent(),
+        ),
         body: Stack(
-            children: <Widget>[
-              background(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  _titleWidget(context),
-                  _subTitleWidget(context),
-                  _cameraIcon(context),
-                  _uploadButton(context),
-                ],
-              )
-            ]
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                _titleWidget(context),
+                _subTitleWidget(context),
+                _cameraIcon(context),
+                _uploadButton(context),
+              ],
+            ),
+          ]
         )
+      )
     );
   }
 
-
-  Widget background() {
+  Widget _drawerContent() {
     return Container(
-        decoration: BoxDecoration(
-            color: DarkBackground,
-            image: DecorationImage(
-              image: AssetImage(
-                  'assets/images/backgrounds/3.0x/bgCircles.png'),
-              fit: BoxFit.cover,
-            )
+      decoration: BoxDecoration(
+        color: RedBackground,
+        image: DecorationImage(
+          image: AssetImage(
+            'assets/images/backgrounds/3.0x/drawer_background.png'),
+          fit: BoxFit.cover,
+          )
+        ),
+      child: ListView(
+        children: <Widget>[
+        _drawerButton("home"),
+        _drawerButton("new game"),
+        _drawerButton("groups"),
+        _drawerButton("leaderboard"),
+        _drawerButton("tutorial"),
+        ]
+        ),
+      );
+  }
+
+  Widget _drawerText(String title) {
+    return Container(
+      width: double.infinity,
+      child: Text(title,
+        style: TextStyle(
+          fontSize: 20.0,
+          color: Colors.white,
+        ),
+        textAlign: TextAlign.left,
         )
+      );
+  }
+
+  Widget _drawerButton(String title, {Function action}) {
+    return Container(
+      child: FlatButton(
+        child: _drawerText(title),
+        onPressed: () { print(title);}));
+  }
+  
+  Widget _background({Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: DarkBackground,
+        image: DecorationImage(
+          image: AssetImage(
+            'assets/images/backgrounds/3.0x/bgCircles.png'),
+          fit: BoxFit.cover,
+          )
+        ),
+      child: child,
     );
   }
 
