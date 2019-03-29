@@ -21,6 +21,7 @@ class ResultsPage extends StatelessWidget {
         String item = '';
         int confidence = 0;
         String iconPath = toIconPath('');
+        List<Widget> children = [_background(), _uploadButton(context)];
 
         if (snapshot.data != null && snapshot.data.length > 0) {
           final results = snapshot.data;
@@ -31,31 +32,22 @@ class ResultsPage extends StatelessWidget {
           item = results.first.name;
           confidence = results.first.confidence.floor();
           iconPath = toIconPath(item);
+          children.addAll([_titleBar(context, "Results"), _iconBackground(context, iconPath), _mainStatistic(context, confidence), _mainDescriptor(context, item)]);
         }
+        else
+          children.addAll([_titleBar(context, "Loading..."), _loadingIcon(context)]);
 
         return _background(
             child: Scaffold(
                 backgroundColor: Colors.transparent,
-                appBar: AppBar(
-                    backgroundColor: Colors.transparent,
-                  elevation: 0.0,
-                ),
                 body: Stack(
-                    children: <Widget>[
-                      _background(),
-                      _iconBackground(context, iconPath),
-                      _titleBar(context),
-                      _mainStatistic(context, confidence),
-                      _mainDescriptor(context, item),
-                      _uploadButton(context),
-                    ]
+                    children: children,
                 )
             )
         );
       },
     );
   }
-
 
   Widget _background({Widget child}) {
     return Container(
@@ -71,7 +63,7 @@ class ResultsPage extends StatelessWidget {
     );
   }
 
-  Widget _titleBar(BuildContext context) {
+  Widget _titleBar(BuildContext context, String title) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
 
@@ -89,17 +81,16 @@ class ResultsPage extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              _titleText(),
-              //_titleBarIcon(context),
+              _titleText(title),
             ],
           )
         )
     );
   }
 
-  Widget _titleText() {
+  Widget _titleText(String title) {
     return Text(
-      "Results",
+      title,
       textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: 24.0,
@@ -119,7 +110,6 @@ class ResultsPage extends StatelessWidget {
       color: Colors.white,
       height: 18.0,);
   }
-
 
   Widget _mainStatistic(BuildContext context, int confidence) {
     final mediaData = MediaQuery.of(context);
@@ -179,7 +169,6 @@ class ResultsPage extends StatelessWidget {
     );
   }
 
-
   Widget _mainDescriptor(BuildContext context, String item) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
@@ -201,14 +190,13 @@ class ResultsPage extends StatelessWidget {
           ],
         )
     );
-
   }
 
   Widget _iconBackground(BuildContext context, String iconPath) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
     final width = mediaData.size.width;
-    
+  
     return Positioned(
       top: height * .216,
       left: width * .093,
@@ -219,10 +207,7 @@ class ResultsPage extends StatelessWidget {
         width: width * .814,
       ),
     );
-
   }
-
-
 
   Widget _uploadButton(BuildContext context) {
     final mediaData = MediaQuery.of(context);
@@ -234,8 +219,6 @@ class ResultsPage extends StatelessWidget {
         right: width * .1665,
         left: width * .1665,
         child: Container(
-
-
             child: RaisedButton(
               child: Container(
                 //padding: EdgeInsets.symmetric(horizontal: width * 0.66),
@@ -285,6 +268,22 @@ class ResultsPage extends StatelessWidget {
     );
   }
 
+  Widget _loadingIcon(BuildContext context) {
+    final mediaData = MediaQuery.of(context);
+    final height = mediaData.size.height;
+    final width = mediaData.size.width;
+
+    return Positioned(
+      top: height * .25,
+      left: width * .25,
+      right: width * .25,
+      child: SvgPicture.asset(
+        'assets/images/icons/icon-logo.svg',
+        color: Colors.white,
+        width: width * .5,
+      ),
+    );
+  }
 
   String toIconPath (String item) {
     List<String> items = ['bowl', 'bread', 'burrito', 'camera', 'cup', 'hotdog', 'taco'];
