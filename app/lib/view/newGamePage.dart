@@ -6,7 +6,8 @@ class NewGamePage extends StatelessWidget{
     return Scaffold(
       body: Center(
         child: FlatButton(
-          onPressed: () => Navigator.of(context).pushNamed("/home"),
+          onPressed: () =>
+              Navigator.of(context).popUntil((Route r) => r.settings.name == '/home'),
           child: Text("New Game")
         ),
       ),

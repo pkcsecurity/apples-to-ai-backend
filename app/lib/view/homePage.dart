@@ -56,10 +56,15 @@ class HomePage extends StatelessWidget {
         children: <Widget>[
           _drawerButton("home"),
           _drawerButton(
-            "new game",
-            action: (){
-              Navigator.of(context).pushNamed("/newgame");
-            }
+              "new game",
+              action: () {
+                Navigator.of(context).maybePop().then((bool b) {
+                  if (b) {
+                    Navigator.of(context).pushNamed('/newgame');
+                  }
+                }
+                );
+              }
           ),
           _drawerButton("groups"),
           _drawerButton("leaderboard"),

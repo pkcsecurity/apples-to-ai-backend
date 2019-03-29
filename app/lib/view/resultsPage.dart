@@ -33,16 +33,23 @@ class ResultsPage extends StatelessWidget {
           iconPath = toIconPath(item);
         }
 
-        return Scaffold(
-            body: Stack(
-                children: <Widget>[
-                  _background(),
-                  _iconBackground(context, iconPath),
-                  _titleBar(context),
-                  _mainStatistic(context, confidence),
-                  _mainDescriptor(context, item),
-                  _uploadButton(context),
-                ]
+        return _background(
+            child: Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: AppBar(
+                    backgroundColor: Colors.transparent,
+                  elevation: 0.0,
+                ),
+                body: Stack(
+                    children: <Widget>[
+                      _background(),
+                      _iconBackground(context, iconPath),
+                      _titleBar(context),
+                      _mainStatistic(context, confidence),
+                      _mainDescriptor(context, item),
+                      _uploadButton(context),
+                    ]
+                )
             )
         );
       },
@@ -50,16 +57,17 @@ class ResultsPage extends StatelessWidget {
   }
 
 
-  Widget _background() {
+  Widget _background({Widget child}) {
     return Container(
-        decoration: BoxDecoration(
-            color: LightOliveGreen,
-            image: DecorationImage(
-              image: AssetImage(
-                  'assets/images/backgrounds/3.0x/bgCircles.png'),
-              fit: BoxFit.cover,
-            )
-        )
+      decoration: BoxDecoration(
+          color: LightOliveGreen,
+          image: DecorationImage(
+            image: AssetImage(
+                'assets/images/backgrounds/3.0x/bgCircles.png'),
+            fit: BoxFit.cover,
+          )
+      ),
+      child: child,
     );
   }
 
