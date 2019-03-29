@@ -5,8 +5,8 @@ import 'package:app/model/ricoResultsModel.dart';
 import 'package:app/provider/ricoProvider.dart';
 
 class GameStateBloc {
-  final _image = BehaviorSubject<File>(seedValue: null);
-  final _results = BehaviorSubject<List<RicoResult>>(seedValue: []);
+  final _image = PublishSubject<File>();
+  final _results = PublishSubject<List<RicoResult>>();
 
   Stream<List<RicoResult>> get resultsStream => _results.stream;
   Sink<File> get imageSink => _image.sink;
