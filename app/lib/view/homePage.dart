@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
           elevation: 0.0,
         ),
         drawer: Drawer(
-          child: _drawerContent(),
+          child: _drawerContent(context),
         ),
         body: Stack(
           children: <Widget>[
@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _drawerContent() {
+  Widget _drawerContent(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: RedBackground,
@@ -54,14 +54,19 @@ class HomePage extends StatelessWidget {
         ),
       child: ListView(
         children: <Widget>[
-        _drawerButton("home"),
-        _drawerButton("new game"),
-        _drawerButton("groups"),
-        _drawerButton("leaderboard"),
-        _drawerButton("tutorial"),
+          _drawerButton("home"),
+          _drawerButton(
+            "new game",
+            action: (){
+              Navigator.of(context).pushNamed("/newgame");
+            }
+          ),
+          _drawerButton("groups"),
+          _drawerButton("leaderboard"),
+          _drawerButton("tutorial"),
         ]
-        ),
-      );
+      ),
+    );
   }
 
   Widget _drawerText(String title) {
@@ -81,7 +86,10 @@ class HomePage extends StatelessWidget {
     return Container(
       child: FlatButton(
         child: _drawerText(title),
-        onPressed: () { print(title);}));
+        onPressed: () {
+          print(title);
+          action?.call();
+        }));
   }
   
   Widget _background({Widget child}) {
@@ -92,8 +100,8 @@ class HomePage extends StatelessWidget {
           image: AssetImage(
             'assets/images/backgrounds/3.0x/bgCircles.png'),
           fit: BoxFit.cover,
-          )
-        ),
+        )
+      ),
       child: child,
     );
   }
@@ -134,7 +142,8 @@ class HomePage extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 color: Colors.white
             )
-        ));
+        )
+    );
   }
 
   Widget _cameraIcon(BuildContext context) {

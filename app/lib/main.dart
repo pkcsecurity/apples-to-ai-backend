@@ -5,6 +5,7 @@ import 'package:app/provider/stateProvider.dart';
 import 'package:app/view/splashPage.dart';
 import 'package:app/view/homePage.dart';
 import 'package:app/view/loginPage.dart';
+import 'package:app/view/newGamePage.dart';
 import 'package:app/view/resultsPage.dart';
 
 void main() {
@@ -63,6 +64,11 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
                 builder: (_) => ResultsPage(),
                 settings: settings,
               );
+            case '/newgame':
+              return SlideInLeftOutRightRoute(
+                builder: (_) => NewGamePage(),
+                settings: settings,
+              );
             default: // '/login'
               return CustomAnimatedRoute(
                 builder: (_) => LoginPage(),
@@ -87,5 +93,23 @@ class CustomAnimatedRoute<T> extends MaterialPageRoute<T> {
     // Fades between routes. (If you don't want any animation,
     // just return child.)
     return  FadeTransition(opacity: animation, child: child);
+  }
+}
+
+class SlideInLeftOutRightRoute<T> extends MaterialPageRoute<T> {
+  SlideInLeftOutRightRoute({WidgetBuilder builder, RouteSettings settings})
+      : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    final _animation = Tween<Offset>(
+        begin: Offset(1.0, 0.0),
+        end: Offset(0.0, 0.0))
+        .animate(animation);
+    return SlideTransition(
+      position: _animation,
+      child: child,
+    );
   }
 }
