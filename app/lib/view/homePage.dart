@@ -199,6 +199,7 @@ class HomePage extends StatelessWidget {
           final image = await ImagePicker.pickImage(source: ImageSource.gallery)
               .then((File file) {
                 if (file != null) {
+                  bloc.gameStateBloc.statusSink.add("Uploading image...");
                   print('Got an image! Uploading...');
                   Navigator.of(context).pushNamed('/results');
                   bloc.gameStateBloc.addImage(file);

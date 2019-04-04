@@ -32,10 +32,10 @@ class ResultsPage extends StatelessWidget {
           item = results.first.name;
           confidence = results.first.confidence.floor();
           iconPath = toIconPath(item);
-          children.addAll([_titleBar(context, "Results"), _iconBackground(context, iconPath), _mainStatistic(context, confidence), _mainDescriptor(context, item)]);
+          children.addAll([_titleBar(context), _iconBackground(context, iconPath), _mainStatistic(context, confidence), _mainDescriptor(context, item)]);
         }
         else
-          children.addAll([_titleBar(context, "Loading..."), _loadingIcon(context)]);
+          children.addAll([_titleBar(context), _loadingIcon(context)]);
 
         return _background(
             child: Scaffold(
@@ -63,29 +63,35 @@ class ResultsPage extends StatelessWidget {
     );
   }
 
-  Widget _titleBar(BuildContext context, String title) {
+  Widget _titleBar(BuildContext context) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
 
-    return SafeArea(
-        child: Container(
+    return StreamBuilder(
+      // initialData: "Results",
+      stream: StateProvider.of(context).gameStateBloc.statusStream,
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot){
+        return SafeArea(
+          child: Container(
             constraints: BoxConstraints.expand(height: height * .06),
             decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(
-                  color: DarkOliveGreen,
-                  width: 1.0,
+              border: Border(bottom: BorderSide(
+                color: DarkOliveGreen,
+                width: 1.0,
                 )
-                )
-            ),
+              )
+              ),
 
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _titleText(title),
-            ],
-          )
-        )
-    );
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+              _titleText(snapshot.data),
+              ],
+              )
+            )
+          );
+      }
+      );
   }
 
   Widget _titleText(String title) {
