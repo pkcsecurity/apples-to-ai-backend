@@ -35,15 +35,7 @@ class NewGamePage extends StatelessWidget{
                 left: 20,
                 right: 20,
               ),
-              child: TextField(
-                decoration: InputDecoration(
-                  labelText: "Enter Your Game Name",
-                  hintText: "My Awesome Game",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24.0),
-                    ),
-                  ),
-                ),
+              child: _textField("Enter Your Game Name", "My Awesome Game"),
               ),
             _submitButton(context),
             ],
@@ -73,9 +65,15 @@ class NewGamePage extends StatelessWidget{
     );
   }
 
-  Widget _textField() {
+  Widget _textField(String label, String hint) {
     return TextField(
-
+      decoration: InputDecoration(
+        labelText: "Enter Your Game Name",
+        hintText: "My Awesome Game",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(24.0),
+        ),
+      ),
     );
   }
 }
