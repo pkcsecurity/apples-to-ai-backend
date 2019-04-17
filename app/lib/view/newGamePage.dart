@@ -25,6 +25,7 @@ class NewGamePage extends StatelessWidget{
             Text(
               "Create a new game\nand play with your friends!",
               style: TextStyle(
+                fontWeight: FontWeight.w600,
                 color: Colors.blue,
                 fontSize: 20.0
               ),
@@ -36,11 +37,11 @@ class NewGamePage extends StatelessWidget{
                 right: 20,
               ),
               child: _textField("Enter Your Game Name", "My Awesome Game"),
-              ),
+            ),
             _submitButton(context),
-            ],
-          )
+          ],
         )
+      )
     );
   }
 
@@ -59,9 +60,39 @@ class NewGamePage extends StatelessWidget{
   }
 
   Widget _submitButton(BuildContext context) {
-    return FlatButton(
-      onPressed: () => Navigator.of(context).popUntil((Route r) => r.settings.name == '/home'),
-      child: Text("Let's Play!")
+    final mediaData = MediaQuery.of(context);
+    final height = mediaData.size.height;
+    final width = mediaData.size.width;
+
+    return Container(
+      padding: EdgeInsets.only(
+        top: height * .05,
+        right: width * .1665,
+        left: width * .1665,
+      ),
+      child: RaisedButton(
+        child: Container(
+          constraints: BoxConstraints(minHeight: height * .06,),
+          child: _buttonText()
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
+        color: LightOliveGreen,
+        onPressed: () => Navigator.of(context).popUntil((Route r) => r.settings.name == '/home'),
+      )
+    );
+  }
+
+  Widget _buttonText() {
+    final text = "Let's Play!";
+    return Center(
+      child: Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+          fontSize: 16.0,
+        ),
+      )
     );
   }
 
