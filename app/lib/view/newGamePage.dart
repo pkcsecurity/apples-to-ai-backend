@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:app/view/widgets/color.dart';
-import 'package:app/view/animatedFormChild.dart';
+import 'package:app/view/animatedForm.dart';
 
 class NewGamePage extends StatefulWidget {
   @override
@@ -12,8 +12,6 @@ class NewGamePage extends StatefulWidget {
 
 class NewGamePageState extends State<NewGamePage> with TickerProviderStateMixin {
   final GlobalKey<FormFieldState<String>> gameName = GlobalKey<FormFieldState<String>>();
-  final AnimationController controller1, controller2;
-  final Animation animation1, animation2;
 
   @override
   Widget build(BuildContext context){
@@ -35,28 +33,22 @@ class NewGamePageState extends State<NewGamePage> with TickerProviderStateMixin 
               height: height*0.2,
             ),
             AnimatedForm(
-              [AnimatedFormChild(
-                controller1,
-                animation1,
-                Text(
+              [Text(
                   "Create a new game and\nplay with your friends!",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: Colors.blue,
                     fontSize: 20.0
                   ),
-                )),
-               AnimatedFormChild(
-                controller2,
-                animation2,
-                Text(
+                ),
+               Text(
                   "Second screen",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: Colors.blue,
                     fontSize: 20.0
                   ),
-                ))]
+                )]
             ),
             // Container(
             //   transform: Matrix4.translationValues(_animation.value * width * 2, 0.0, 0.0),
