@@ -66,9 +66,9 @@ class HomePage extends StatelessWidget {
                 );
               }
           ),
-          _drawerButton("groups"),
-          _drawerButton("leaderboard"),
-          _drawerButton("tutorial"),
+          // _drawerButton("groups"),
+          // _drawerButton("leaderboard"),
+          // _drawerButton("tutorial"),
         ]
       ),
     );
@@ -182,7 +182,6 @@ class HomePage extends StatelessWidget {
 
       child: RaisedButton(
         child: Container(
-          //padding: EdgeInsets.symmetric(horizontal: width * 0.66),
           constraints: BoxConstraints(minHeight: height * .06,),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

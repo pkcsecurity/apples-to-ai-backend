@@ -6,6 +6,8 @@ import 'package:app/view/splashPage.dart';
 import 'package:app/view/homePage.dart';
 import 'package:app/view/loginPage.dart';
 import 'package:app/view/newGamePage.dart';
+import 'package:app/view/createGamePage.dart';
+import 'package:app/view/joinGamePage.dart';
 import 'package:app/view/resultsPage.dart';
 
 void main() {
@@ -67,6 +69,16 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
             case '/newgame':
               return SlideInLeftOutRightRoute(
                 builder: (_) => NewGamePage(),
+                settings: settings,
+              );
+            case '/creategame':
+              return SlideInLeftOutRightRoute(
+                builder: (_) => CreateGamePage(),
+                settings: settings,
+              );
+            case '/joingame':
+              return SlideInLeftOutRightRoute(
+                builder: (_) => JoinGamePage(),
                 settings: settings,
               );
             default: // '/login'

@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:app/view/widgets/color.dart';
-import 'package:app/view/createGamePage.dart';
 
-class NewGamePage extends StatelessWidget{
+class CreateGamePage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     final mediaData = MediaQuery.of(context);
@@ -23,8 +22,23 @@ class NewGamePage extends StatelessWidget{
             Container(
               height: height*0.2,
             ),
-            _createGameButton(context),
-            _joinGameButton(context)
+            Text(
+              "Create a new game\nand play with your friends!",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Colors.blue,
+                fontSize: 20.0
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(
+                top: 20,
+                left: 20,
+                right: 20,
+              ),
+              child: _textField("Enter Your Game Name", "My Awesome Game"),
+            ),
+            _submitButton(context),
           ],
         )
       )
@@ -45,15 +59,7 @@ class NewGamePage extends StatelessWidget{
     );
   }
 
-  Widget _createGameButton(BuildContext context){
-    return _button(context, "Create a Game", "/creategame");
-  }
-
-  Widget _joinGameButton(BuildContext context){
-    return _button(context, "Join a Game", "/joingame");
-  }
-
-  Widget _button(BuildContext context, String text, String path) {
+  Widget _submitButton(BuildContext context) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
     final width = mediaData.size.width;
@@ -67,17 +73,17 @@ class NewGamePage extends StatelessWidget{
       child: RaisedButton(
         child: Container(
           constraints: BoxConstraints(minHeight: height * .06,),
-          child: _buttonText(text)
+          child: _buttonText()
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
         color: LightOliveGreen,
-        onPressed: () => Navigator.of(context).pushNamed(path),
+        onPressed: () => Navigator.of(context).popUntil((Route r) => r.settings.name == '/home'),
       )
     );
   }
 
-  Widget _buttonText(String btnText) {
-    final text = btnText;
+  Widget _buttonText() {
+    final text = "Let's Play!";
     return Center(
       child: Text(
         text,
@@ -87,6 +93,18 @@ class NewGamePage extends StatelessWidget{
           fontSize: 16.0,
         ),
       )
+    );
+  }
+
+  Widget _textField(String label, String hint) {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(24.0),
+        ),
+      ),
     );
   }
 }
