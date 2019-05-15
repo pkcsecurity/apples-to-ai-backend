@@ -49,8 +49,8 @@ class HomePage extends StatelessWidget {
     return drawerBackground(
       child: ListView(
         children: <Widget>[
-          drawerButton("home"),
-          drawerButton(
+          flatButton("home"),
+          flatButton(
               "new game",
               action: () {
                 Navigator.of(context).maybePop().then((bool b) {
@@ -124,13 +124,24 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _uploadButton(BuildContext context) {
-    return raisedIconButton(
-      context,
-      "UPLOAD A PHOTO",
-      _buttonIcon(context),
-      action: () async {
-        print('Getting an image...');
-        final image = await ImagePicker.pickImage(source: ImageSource.gallery)
+    final mediaData = MediaQuery.of(context);
+    final height = mediaData.size.height;
+    final width = mediaData.size.width;
+   
+    return Container(
+      padding: EdgeInsets.only(
+        top: height * .113,
+        right: width * .1665,
+        left: width * .1665,
+      ),
+      child: raisedIconButton(
+        "UPLOAD A PHOTO",
+        LightOliveGreen,
+        Colors.white,
+        _buttonIcon(context),
+        action: () async {
+          print('Getting an image...');
+          final image = await ImagePicker.pickImage(source: ImageSource.gallery)
           .then((File file) {
             if (file != null) {
               bloc.gameStateBloc.statusSink.add("Uploading image...");
@@ -138,9 +149,9 @@ class HomePage extends StatelessWidget {
               Navigator.of(context).pushNamed('/results');
               bloc.gameStateBloc.addImage(file);
             }
-          }
-        );
-      }
+          });
+        }
+      )
     );
   }
 

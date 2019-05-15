@@ -35,13 +35,73 @@ class LoginPage extends StatelessWidget{
             ),
             inputField("Username", ""),
             inputField("Password", ""),
-            raisedButton(context, "Sign In", () => print("Need to validate input")),
-            raisedButton(context, "Register", () => Navigator.of(context).pushNamed('/register')),
-            raisedButton(context, "Just Play", () => Navigator.of(context).pushNamed('/home'))
+            _signInButton(context),
+            _registerButton(context),
+            _playButton(context)
           ],
         )
       ),
       color: LightBlue
+    );
+  }
+
+  Widget _signInButton(BuildContext context){
+    final mediaData = MediaQuery.of(context);
+    final height = mediaData.size.height;
+    final width = mediaData.size.width;
+
+    return Container(
+      padding: EdgeInsets.only(
+        top: height * .02,
+        right: width * .1665,
+        left: width * .1665,
+      ),
+      child: raisedButton(
+        "Sign In",
+        LightOliveGreen,
+        Colors.white,
+        action: () => print("Need to validate input")
+      )
+    );
+  }
+
+  Widget _registerButton(BuildContext context){
+    final mediaData = MediaQuery.of(context);
+    final height = mediaData.size.height;
+    final width = mediaData.size.width;
+
+    return Container(
+      padding: EdgeInsets.only(
+        top: height * .02,
+        right: width * .1665,
+        left: width * .1665,
+      ),
+      child: raisedButton(
+        "Register",
+        LightOliveGreen,
+        Colors.white,
+        action: () => Navigator.of(context).popUntil((Route r) => r.settings.name == '/register')
+      )
+    );
+  }
+
+  Widget _playButton(BuildContext context){
+    final mediaData = MediaQuery.of(context);
+    final height = mediaData.size.height;
+    final width = mediaData.size.width;
+
+    return Container(
+      padding: EdgeInsets.only(
+        top: height * .02,
+        right: width * .1665,
+        left: width * .1665,
+      ),
+      child: raisedButton(
+        "Just Play",
+        LightOliveGreen,
+        Colors.white,
+        action: () => Navigator.of(context).popUntil((Route r) => r.settings.name == '/home')
+      )
     );
   }
 }

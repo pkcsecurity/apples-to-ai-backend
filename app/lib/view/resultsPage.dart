@@ -8,7 +8,6 @@ import 'package:app/view/widgets/button.dart';
 import 'package:app/view/widgets/color.dart';
 import 'package:app/view/widgets/misc.dart';
 
-
 class ResultsPage extends StatelessWidget {
   StateBloc bloc;
 
@@ -34,7 +33,9 @@ class ResultsPage extends StatelessWidget {
           item = results.first.name;
           confidence = results.first.confidence.floor();
           iconPath = toIconPath(item);
-          children.addAll([_titleBar(context), _iconBackground(context, iconPath), _mainStatistic(context, confidence), _mainDescriptor(context, item), _playAgainButton(context)]);
+          children.addAll([_titleBar(context), _iconBackground(context, iconPath),
+                           _mainStatistic(context, confidence), _mainDescriptor(context, item),
+                           _playAgainButton(context)]);
         }
         else
           children.addAll([_titleBar(context), _loadingIcon(context)]);
@@ -43,7 +44,7 @@ class ResultsPage extends StatelessWidget {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Stack(
-                children: children,
+              children: children,
             )
           ),
           color: LightOliveGreen
@@ -57,30 +58,27 @@ class ResultsPage extends StatelessWidget {
     final height = mediaData.size.height;
 
     return StreamBuilder(
-      // initialData: "Results",
       stream: StateProvider.of(context).gameStateBloc.statusStream,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot){
         return SafeArea(
           child: Container(
             constraints: BoxConstraints.expand(height: height * .06),
             decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(
-                color: DarkOliveGreen,
-                width: 1.0,
+              border: Border(
+                bottom: BorderSide(
+                  color: DarkOliveGreen,
+                  width: 1.0,
                 )
               )
-              ),
-
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-              _titleText(snapshot.data),
-              ],
-              )
+              children: <Widget>[_titleText(snapshot.data)],
             )
-          );
+          )
+        );
       }
-      );
+    );
   }
 
   Widget _titleText(String title) {
@@ -96,16 +94,6 @@ class ResultsPage extends StatelessWidget {
     );
   }
 
-  Widget _titleBarIcon(BuildContext context) {
-    final mediaData = MediaQuery.of(context);
-    final width = mediaData.size.height;
-
-    return SvgPicture.asset(
-      'assets/images/icons/menu.svg',
-      color: Colors.white,
-      height: 18.0,);
-  }
-
   Widget _mainStatistic(BuildContext context, int confidence) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
@@ -116,7 +104,7 @@ class ResultsPage extends StatelessWidget {
 
     return Positioned(
       top: height * .158,
-      left: width * .085,
+      right: width * .085,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -173,8 +161,8 @@ class ResultsPage extends StatelessWidget {
 
     return Positioned(
       top: height * .343,
-      right: width * .093,
-      width: width * .406,
+      left: width * .093,
+      width: width * .8,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -208,11 +196,24 @@ class ResultsPage extends StatelessWidget {
     final height = mediaData.size.height;
     final width = mediaData.size.width;
 
-    return raisedIconButton(
-      context,
-      "PLAY AGAIN",
-      _buttonIcon(context),
-      action: () => Navigator.of(context).popUntil((Route r) => r.settings.name == '/home')
+    return Positioned(
+      top: height * .65,
+      left: width * 0,
+      right: width * 0,
+      child: Container(
+        padding: EdgeInsets.only(
+          top: height * .113,
+          right: width * .1665,
+          left: width * .1665,
+        ),
+        child: raisedIconButton(
+          "PLAY AGAIN",
+          Colors.white,
+          LightOliveGreen,
+          _buttonIcon(context),
+          action: () => Navigator.of(context).popUntil((Route r) => r.settings.name == '/home')
+        )
+      )
     );
   }
 
@@ -223,7 +224,7 @@ class ResultsPage extends StatelessWidget {
 
     return SvgPicture.asset(
       'assets/images/icons/icon-redo.svg',
-      color: Colors.white,
+      color: LightOliveGreen,
       width: 24.0,
       height: 24.0,
     );
