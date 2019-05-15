@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:app/bloc/stateBloc.dart';
 import 'package:app/model/ricoResultsModel.dart';
 import 'package:app/provider/stateProvider.dart';
+import 'package:app/view/widgets/button.dart';
 import 'package:app/view/widgets/color.dart';
+import 'package:app/view/widgets/misc.dart';
 
 
 class ResultsPage extends StatelessWidget {
@@ -21,7 +23,7 @@ class ResultsPage extends StatelessWidget {
         String item = '';
         int confidence = 0;
         String iconPath = toIconPath('');
-        List<Widget> children = [_background(), _uploadButton(context)];
+        List<Widget> children = [bgCirclesBackground(color: LightOliveGreen)];
 
         if (snapshot.data != null && snapshot.data.length > 0) {
           final results = snapshot.data;
@@ -32,34 +34,21 @@ class ResultsPage extends StatelessWidget {
           item = results.first.name;
           confidence = results.first.confidence.floor();
           iconPath = toIconPath(item);
-          children.addAll([_titleBar(context), _iconBackground(context, iconPath), _mainStatistic(context, confidence), _mainDescriptor(context, item)]);
+          children.addAll([_titleBar(context), _iconBackground(context, iconPath), _mainStatistic(context, confidence), _mainDescriptor(context, item), _playAgainButton(context)]);
         }
         else
           children.addAll([_titleBar(context), _loadingIcon(context)]);
 
-        return _background(
-            child: Scaffold(
-                backgroundColor: Colors.transparent,
-                body: Stack(
-                    children: children,
-                )
+        return bgCirclesBackground(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Stack(
+                children: children,
             )
+          ),
+          color: LightOliveGreen
         );
       },
-    );
-  }
-
-  Widget _background({Widget child}) {
-    return Container(
-      decoration: BoxDecoration(
-          color: LightOliveGreen,
-          image: DecorationImage(
-            image: AssetImage(
-                'assets/images/backgrounds/3.0x/bgCircles.png'),
-            fit: BoxFit.cover,
-          )
-      ),
-      child: child,
     );
   }
 
@@ -134,7 +123,6 @@ class ResultsPage extends StatelessWidget {
           _mainSubText(topText),
           _mainText('${confidence.toString()}%'),
           _mainSubText(lowerText),
-          
         ],
       )
     );
@@ -184,17 +172,17 @@ class ResultsPage extends StatelessWidget {
     final lowerText = 's for everyone!!!';
 
     return Positioned(
-        top: height * .343,
-        right: width * .093,
-        width: width * .406,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _mainSubText(topText),
-            _mainText('${item.toUpperCase()}!'),
-            _mainSubAltText('$item$lowerText'),
-          ],
-        )
+      top: height * .343,
+      right: width * .093,
+      width: width * .406,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _mainSubText(topText),
+          _mainText('${item.toUpperCase()}!'),
+          _mainSubAltText('$item$lowerText'),
+        ],
+      )
     );
   }
 
@@ -215,49 +203,16 @@ class ResultsPage extends StatelessWidget {
     );
   }
 
-  Widget _uploadButton(BuildContext context) {
+  Widget _playAgainButton(BuildContext context) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
     final width = mediaData.size.width;
 
-    return Positioned(
-        bottom: height * .082,
-        right: width * .1665,
-        left: width * .1665,
-        child: Container(
-            child: RaisedButton(
-              child: Container(
-                //padding: EdgeInsets.symmetric(horizontal: width * 0.66),
-                  constraints: BoxConstraints(minHeight: height * .06,),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      _buttonText(),
-                      _buttonIcon(context),
-                    ],
-                  )
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24.0)),
-              color: Colors.white,
-              onPressed: () {
-                print('Play again pressed...');
-                Navigator.of(context).pushNamed('/home');
-              },
-            )
-        )
-    );
-  }
-
-  Widget _buttonText() {
-    final text = "Play again".toUpperCase();
-    return Text(
-      text,
-      style: TextStyle(
-        fontWeight: FontWeight.w500,
-        color: LightOliveGreen,
-        fontSize: 16.0,
-      ),
+    return raisedIconButton(
+      context,
+      "PLAY AGAIN",
+      _buttonIcon(context),
+      action: () => Navigator.of(context).popUntil((Route r) => r.settings.name == '/home')
     );
   }
 
@@ -268,7 +223,7 @@ class ResultsPage extends StatelessWidget {
 
     return SvgPicture.asset(
       'assets/images/icons/icon-redo.svg',
-      color: LightOliveGreen,
+      color: Colors.white,
       width: 24.0,
       height: 24.0,
     );

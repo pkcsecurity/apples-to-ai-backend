@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:app/view/widgets/button.dart';
 import 'package:app/view/widgets/color.dart';
+import 'package:app/view/widgets/misc.dart';
 import 'package:app/bloc/stateBloc.dart';
 import 'package:app/provider/stateProvider.dart';
 
@@ -15,7 +17,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     bloc = StateProvider.of(context);
 
-    return _background(
+    return bgCirclesBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -38,24 +40,17 @@ class HomePage extends StatelessWidget {
             ),
           ]
         )
-      )
+      ),
+      color: DarkBackground
     );
   }
 
   Widget _drawerContent(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: RedBackground,
-        image: DecorationImage(
-          image: AssetImage(
-            'assets/images/backgrounds/3.0x/drawer_background.png'),
-          fit: BoxFit.cover,
-          )
-        ),
+    return drawerBackground(
       child: ListView(
         children: <Widget>[
-          _drawerButton("home"),
-          _drawerButton(
+          drawerButton("home"),
+          drawerButton(
               "new game",
               action: () {
                 Navigator.of(context).maybePop().then((bool b) {
@@ -66,48 +61,9 @@ class HomePage extends StatelessWidget {
                 );
               }
           ),
-          // _drawerButton("groups"),
-          // _drawerButton("leaderboard"),
-          // _drawerButton("tutorial"),
         ]
       ),
-    );
-  }
-
-  Widget _drawerText(String title) {
-    return Container(
-      width: double.infinity,
-      child: Text(title,
-        style: TextStyle(
-          fontSize: 20.0,
-          color: Colors.white,
-        ),
-        textAlign: TextAlign.left,
-        )
-      );
-  }
-
-  Widget _drawerButton(String title, {Function action}) {
-    return Container(
-      child: FlatButton(
-        child: _drawerText(title),
-        onPressed: () {
-          print(title);
-          action?.call();
-        }));
-  }
-  
-  Widget _background({Widget child}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: DarkBackground,
-        image: DecorationImage(
-          image: AssetImage(
-            'assets/images/backgrounds/3.0x/bgCircles.png'),
-          fit: BoxFit.cover,
-        )
-      ),
-      child: child,
+      color: RedBackground
     );
   }
 
@@ -168,56 +124,23 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _uploadButton(BuildContext context) {
-    final mediaData = MediaQuery.of(context);
-    final height = mediaData.size.height;
-    final width = mediaData.size.width;
-
-    return Container(
-      padding: EdgeInsets.only(
-        top: height * .113,
-        right: width * .1665,
-        left: width * .1665,
-      ),
-
-
-      child: RaisedButton(
-        child: Container(
-          constraints: BoxConstraints(minHeight: height * .06,),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _buttonText(),
-              _buttonIcon(context),
-            ],
-          )
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
-        color: LightOliveGreen,
-        onPressed: () async {
-          print('Getting an image...');
-          final image = await ImagePicker.pickImage(source: ImageSource.gallery)
-              .then((File file) {
-                if (file != null) {
-                  bloc.gameStateBloc.statusSink.add("Uploading image...");
-                  print('Got an image! Uploading...');
-                  Navigator.of(context).pushNamed('/results');
-                  bloc.gameStateBloc.addImage(file);
-                }
-          });
-        },
-      )
-    );
-  }
-
-  Widget _buttonText() {
-    final text = "Upload a photo".toUpperCase();
-    return Text(
-      text,
-      style: TextStyle(
-        fontWeight: FontWeight.w500,
-        color: Colors.white,
-        fontSize: 16.0,
-      ),
+    return raisedIconButton(
+      context,
+      "UPLOAD A PHOTO",
+      _buttonIcon(context),
+      action: () async {
+        print('Getting an image...');
+        final image = await ImagePicker.pickImage(source: ImageSource.gallery)
+          .then((File file) {
+            if (file != null) {
+              bloc.gameStateBloc.statusSink.add("Uploading image...");
+              print('Got an image! Uploading...');
+              Navigator.of(context).pushNamed('/results');
+              bloc.gameStateBloc.addImage(file);
+            }
+          }
+        );
+      }
     );
   }
 

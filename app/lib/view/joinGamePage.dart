@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:app/view/widgets/button.dart';
 import 'package:app/view/widgets/color.dart';
+import 'package:app/view/widgets/input.dart';
+import 'package:app/view/widgets/misc.dart';
 
 class JoinGamePage extends StatelessWidget{
   @override
@@ -9,7 +12,7 @@ class JoinGamePage extends StatelessWidget{
     final height = mediaData.size.height;
     final width = mediaData.size.width;
 
-    return _background(
+    return circlesSplashBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -30,81 +33,12 @@ class JoinGamePage extends StatelessWidget{
                 fontSize: 20.0
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(
-                top: 20,
-                left: 20,
-                right: 20,
-              ),
-              child: _textField("Enter a Game Code", "An Awesome Code From My Awesome Friend"),
-            ),
-            _submitButton(context),
+            inputField("Enter a Game Code", "An Awesome Code From My Awesome Friend"),
+            raisedButton(context, "Let's Play!", () => Navigator.of(context).popUntil((Route r) => r.settings.name == '/home')),
           ],
         )
-      )
-    );
-  }
-
-  Widget _background({Widget child}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: LightBlue,
-        image: DecorationImage(
-          image: AssetImage(
-            'assets/images/backgrounds/3.0x/bgCirclesSplash.png'),
-          fit: BoxFit.cover,
-          )
-        ),
-      child: child,
-    );
-  }
-
-  Widget _submitButton(BuildContext context) {
-    final mediaData = MediaQuery.of(context);
-    final height = mediaData.size.height;
-    final width = mediaData.size.width;
-
-    return Container(
-      padding: EdgeInsets.only(
-        top: height * .05,
-        right: width * .1665,
-        left: width * .1665,
       ),
-      child: RaisedButton(
-        child: Container(
-          constraints: BoxConstraints(minHeight: height * .06,),
-          child: _buttonText()
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
-        color: LightOliveGreen,
-        onPressed: () => Navigator.of(context).popUntil((Route r) => r.settings.name == '/home'),
-      )
-    );
-  }
-
-  Widget _buttonText() {
-    final text = "Let's Play!";
-    return Center(
-      child: Text(
-        text,
-        style: TextStyle(
-          fontWeight: FontWeight.w500,
-          color: Colors.white,
-          fontSize: 16.0,
-        ),
-      )
-    );
-  }
-
-  Widget _textField(String label, String hint) {
-    return TextField(
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24.0),
-        ),
-      ),
+      color: LightBlue
     );
   }
 }
