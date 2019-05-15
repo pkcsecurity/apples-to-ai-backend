@@ -5,7 +5,7 @@ import 'package:app/view/widgets/color.dart';
 import 'package:app/view/widgets/misc.dart';
 import 'package:app/view/widgets/input.dart';
 
-class LoginPage extends StatelessWidget{
+class VerificationPage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     final mediaData = MediaQuery.of(context);
@@ -26,18 +26,15 @@ class LoginPage extends StatelessWidget{
               height: height*0.1,
             ),
             Text(
-              "Apples to AI",
+              "Enter the verification code.",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.blue,
                 fontSize: 20.0
               ),
             ),
-            inputField("Username", ""),
-            inputField("Password", "", secure: true),
-            _signInButton(context),
-            _registerButton(context),
-            _playButton(context)
+            inputField("Verification Code", ""),
+            _verifyButton(context),
           ],
         )
       ),
@@ -45,7 +42,7 @@ class LoginPage extends StatelessWidget{
     );
   }
 
-  Widget _signInButton(BuildContext context){
+  Widget _verifyButton(BuildContext context){
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
     final width = mediaData.size.width;
@@ -57,50 +54,13 @@ class LoginPage extends StatelessWidget{
         left: width * .1665,
       ),
       child: raisedButton(
-        "Sign In",
+        "Verify",
         LightOliveGreen,
         Colors.white,
-        action: () => print("Need to validate input")
-      )
-    );
-  }
-
-  Widget _registerButton(BuildContext context){
-    final mediaData = MediaQuery.of(context);
-    final height = mediaData.size.height;
-    final width = mediaData.size.width;
-
-    return Container(
-      padding: EdgeInsets.only(
-        top: height * .02,
-        right: width * .1665,
-        left: width * .1665,
-      ),
-      child: raisedButton(
-        "Register",
-        LightOliveGreen,
-        Colors.white,
-        action: () => Navigator.of(context).pushNamed('/register')
-      )
-    );
-  }
-
-  Widget _playButton(BuildContext context){
-    final mediaData = MediaQuery.of(context);
-    final height = mediaData.size.height;
-    final width = mediaData.size.width;
-
-    return Container(
-      padding: EdgeInsets.only(
-        top: height * .02,
-        right: width * .1665,
-        left: width * .1665,
-      ),
-      child: raisedButton(
-        "Just Play",
-        LightOliveGreen,
-        Colors.white,
-        action: () => Navigator.of(context).pushNamed('/home')
+        action: () {
+          print("Need to validate verification code.");
+          Navigator.of(context).pushNamed('/welcome');
+        }
       )
     );
   }

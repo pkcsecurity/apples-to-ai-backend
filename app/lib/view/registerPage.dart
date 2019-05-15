@@ -5,7 +5,7 @@ import 'package:app/view/widgets/color.dart';
 import 'package:app/view/widgets/misc.dart';
 import 'package:app/view/widgets/input.dart';
 
-class LoginPage extends StatelessWidget{
+class RegisterPage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     final mediaData = MediaQuery.of(context);
@@ -26,42 +26,21 @@ class LoginPage extends StatelessWidget{
               height: height*0.1,
             ),
             Text(
-              "Apples to AI",
+              "Register",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.blue,
                 fontSize: 20.0
               ),
             ),
+            inputField("Phone Number", ""),
             inputField("Username", ""),
             inputField("Password", "", secure: true),
-            _signInButton(context),
             _registerButton(context),
-            _playButton(context)
           ],
         )
       ),
       color: LightBlue
-    );
-  }
-
-  Widget _signInButton(BuildContext context){
-    final mediaData = MediaQuery.of(context);
-    final height = mediaData.size.height;
-    final width = mediaData.size.width;
-
-    return Container(
-      padding: EdgeInsets.only(
-        top: height * .02,
-        right: width * .1665,
-        left: width * .1665,
-      ),
-      child: raisedButton(
-        "Sign In",
-        LightOliveGreen,
-        Colors.white,
-        action: () => print("Need to validate input")
-      )
     );
   }
 
@@ -77,30 +56,13 @@ class LoginPage extends StatelessWidget{
         left: width * .1665,
       ),
       child: raisedButton(
-        "Register",
+        "Sign Up",
         LightOliveGreen,
         Colors.white,
-        action: () => Navigator.of(context).pushNamed('/register')
-      )
-    );
-  }
-
-  Widget _playButton(BuildContext context){
-    final mediaData = MediaQuery.of(context);
-    final height = mediaData.size.height;
-    final width = mediaData.size.width;
-
-    return Container(
-      padding: EdgeInsets.only(
-        top: height * .02,
-        right: width * .1665,
-        left: width * .1665,
-      ),
-      child: raisedButton(
-        "Just Play",
-        LightOliveGreen,
-        Colors.white,
-        action: () => Navigator.of(context).pushNamed('/home')
+        action: () {
+          print("Need to validate inputs.");
+          Navigator.of(context).pushNamed('/verification');
+        }
       )
     );
   }

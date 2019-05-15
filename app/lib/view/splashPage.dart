@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:app/view/widgets/button.dart';
 import 'package:app/view/widgets/color.dart';
-import 'package:app/view/widgets/input.dart';
 import 'package:app/view/widgets/misc.dart';
 
 class SplashPage extends StatelessWidget {

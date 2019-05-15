@@ -8,7 +8,10 @@ import 'package:app/view/loginPage.dart';
 import 'package:app/view/newGamePage.dart';
 import 'package:app/view/createGamePage.dart';
 import 'package:app/view/joinGamePage.dart';
+import 'package:app/view/registerPage.dart';
 import 'package:app/view/resultsPage.dart';
+import 'package:app/view/verificationPage.dart';
+import 'package:app/view/welcomePage.dart';
 
 void main() {
   runApp(ApplesToAIApp());
@@ -42,7 +45,7 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
       stateBloc: bloc,
       child: MaterialApp(
         theme: ThemeData(fontFamily: "Dosis"),
-        initialRoute: '/home',
+        initialRoute: '/login',
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -64,6 +67,21 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
             case '/results':
               return CustomAnimatedRoute(
                 builder: (_) => ResultsPage(),
+                settings: settings,
+              );
+            case '/welcome':
+              return CustomAnimatedRoute(
+                builder: (_) => WelcomePage(),
+                settings: settings,
+              );
+            case '/register':
+              return SlideInLeftOutRightRoute(
+                builder: (_) => RegisterPage(),
+                settings: settings,
+              );
+            case '/verification':
+              return SlideInLeftOutRightRoute(
+                builder: (_) => VerificationPage(),
                 settings: settings,
               );
             case '/newgame':
@@ -104,7 +122,7 @@ class CustomAnimatedRoute<T> extends MaterialPageRoute<T> {
     if (settings.isInitialRoute) return child;
     // Fades between routes. (If you don't want any animation,
     // just return child.)
-    return  FadeTransition(opacity: animation, child: child);
+    return FadeTransition(opacity: animation, child: child);
   }
 }
 
