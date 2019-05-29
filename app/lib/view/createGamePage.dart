@@ -23,7 +23,7 @@ class CreateGamePage extends StatelessWidget{
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
-              height: height*0.2,
+              height: height * 0.1,
             ),
             Text(
               "Create a new game\nand play with your friends!",
@@ -33,7 +33,9 @@ class CreateGamePage extends StatelessWidget{
                 fontSize: 20.0
               ),
             ),
-            inputField("Enter Your Game Name", "My Awesome Game"),
+            inputField("Game Name", "My Awesome Game"),
+            inputField("How Many Rounds", "3 Rounds or More"),
+            inputField("Time Duration", "5 Minutes at Minimum"),
             _submitButton(context)
           ],
         )
