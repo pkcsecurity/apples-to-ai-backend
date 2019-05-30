@@ -40,6 +40,8 @@ class InvitePage extends StatelessWidget{
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
     final width = mediaData.size.width;
+    String wp1 = WordPair.random().asPascalCase;
+    String wp2 = WordPair.random().asPascalCase;
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -62,7 +64,7 @@ class InvitePage extends StatelessWidget{
             border: Border.all(color: DarkOliveGreen)
           ),
           child: Text(
-            generateWordPairs().take(2).toString(),
+            wp1+wp2,
             style: TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.white,
