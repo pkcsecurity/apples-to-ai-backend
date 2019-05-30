@@ -46,7 +46,7 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
       stateBloc: bloc,
       child: MaterialApp(
         theme: ThemeData(fontFamily: "Dosis"),
-        initialRoute: '/invite',
+        initialRoute: '/login',
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -73,6 +73,11 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
             case '/welcome':
               return CustomAnimatedRoute(
                 builder: (_) => WelcomePage(),
+                settings: settings,
+              );
+            case '/invite':
+              return CustomAnimatedRoute(
+                builder: (_) => InvitePage(),
                 settings: settings,
               );
             case '/register':
@@ -102,7 +107,7 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
               );
             default: // '/login'
               return CustomAnimatedRoute(
-                builder: (_) => InvitePage(),
+                builder: (_) => LoginPage(),
                 settings: settings,
               );
           }
