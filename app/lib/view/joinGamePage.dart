@@ -57,7 +57,7 @@ class JoinGamePage extends StatelessWidget{
         "Let's Play!",
         LightOliveGreen,
         Colors.white,
-        action: () => Navigator.of(context).popUntil((Route r) => r.settings.name == '/home')
+        action: () => Navigator.of(context).pushNamed("/invite")
       )
     );
   }
