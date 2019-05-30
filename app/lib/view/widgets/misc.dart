@@ -42,3 +42,16 @@ Widget drawerBackground({Widget child, Color color}) {
     child: child
   );
 }
+
+Widget tileCard({String text, String imgUrl}){
+  return Card(
+    child: ListTile(
+      leading: CircleAvatar(
+        radius: 15.0,
+        backgroundImage: NetworkImage(imgUrl),
+        backgroundColor: Colors.transparent,
+      ),
+      title: Text(text),
+    ),
+  );
+}

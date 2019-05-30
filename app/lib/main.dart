@@ -12,6 +12,7 @@ import 'package:app/view/registerPage.dart';
 import 'package:app/view/resultsPage.dart';
 import 'package:app/view/verificationPage.dart';
 import 'package:app/view/welcomePage.dart';
+import 'package:app/view/invitePage.dart';
 
 void main() {
   runApp(ApplesToAIApp());
@@ -45,7 +46,7 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
       stateBloc: bloc,
       child: MaterialApp(
         theme: ThemeData(fontFamily: "Dosis"),
-        initialRoute: '/login',
+        initialRoute: '/invite',
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -101,7 +102,7 @@ class _ApplesToAIState extends State<ApplesToAIApp> {
               );
             default: // '/login'
               return CustomAnimatedRoute(
-                builder: (_) => LoginPage(),
+                builder: (_) => InvitePage(),
                 settings: settings,
               );
           }
