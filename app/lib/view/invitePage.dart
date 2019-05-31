@@ -86,14 +86,14 @@ class InvitePage extends StatelessWidget{
   }
 
   Widget playerList(BuildContext context) {
-    final titles = ["Purple Nightingale", "Yellow Sea Otter", "Orange Hummingbird"];
+    final titles = ["Purple Nightingale", "Yellow Sea Otter", "Orange Triceratops"];
 
     return ListView.builder(
       itemCount: titles.length,
       itemBuilder: (context, index) {
         return tileCard(
           text: titles[index],
-          imgUrl: "https://picsum.photos/200"
+          imgUrl: "https://picsum.photos/id/" + (100*index).toString() + "/200"
         );
       },
     );

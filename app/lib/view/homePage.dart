@@ -34,7 +34,8 @@ class HomePage extends StatelessWidget {
               children: <Widget>[
                 _titleWidget(context),
                 _subTitleWidget(context),
-                _cameraIcon(context),
+                _cameraBackImg(context),
+                _takeShotButton(context),
                 _uploadButton(context),
               ],
             ),
@@ -70,7 +71,7 @@ class HomePage extends StatelessWidget {
   Widget _titleWidget(BuildContext context) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
-    final top = height * .213;
+    final top = height * .113;
 
     return Container(
         padding: EdgeInsets.only(top: top),
@@ -107,7 +108,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _cameraIcon(BuildContext context) {
+  Widget _cameraBackImg(BuildContext context) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
     final width = mediaData.size.width;
@@ -123,6 +124,51 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  Widget _takeShotButton(BuildContext context){
+    final mediaData = MediaQuery.of(context);
+    final height = mediaData.size.height;
+    final width = mediaData.size.width;
+   
+    return Container(
+      padding: EdgeInsets.only(
+        top: height * .0613,
+        right: width * .1665,
+        left: width * .1665,
+      ),
+      child: raisedIconButton(
+        "TAKE A PHOTO",
+        LightOliveGreen,
+        Colors.white,
+        _cameraIcon(context),
+        action: () async {
+          print('Taking a photo...');
+          final image = await ImagePicker.pickImage(source: ImageSource.camera)
+          .then((File file) {
+            if (file != null) {
+              bloc.gameStateBloc.statusSink.add("Uploading image...");
+              print('Got an image! Uploading...');
+              Navigator.of(context).pushNamed('/results');
+              bloc.gameStateBloc.addImage(file);
+            }
+          });
+        }
+      )
+    );
+  }
+
+  Widget _cameraIcon(BuildContext context) {
+    final mediaData = MediaQuery.of(context);
+    final height = mediaData.size.height;
+    final width = mediaData.size.width;
+
+    return SvgPicture.asset(
+      'assets/images/icons/icon-camera.svg',
+      color: Colors.white,
+      width: 22.0,
+      height: 22.0,
+    );
+  }
+
   Widget _uploadButton(BuildContext context) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
@@ -130,7 +176,7 @@ class HomePage extends StatelessWidget {
    
     return Container(
       padding: EdgeInsets.only(
-        top: height * .113,
+        top: height * .033,
         right: width * .1665,
         left: width * .1665,
       ),
@@ -138,7 +184,7 @@ class HomePage extends StatelessWidget {
         "UPLOAD A PHOTO",
         LightOliveGreen,
         Colors.white,
-        _buttonIcon(context),
+        _uploadIcon(context),
         action: () async {
           print('Getting an image...');
           final image = await ImagePicker.pickImage(source: ImageSource.gallery)
@@ -155,7 +201,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buttonIcon(BuildContext context) {
+  Widget _uploadIcon(BuildContext context) {
     final mediaData = MediaQuery.of(context);
     final height = mediaData.size.height;
     final width = mediaData.size.width;
