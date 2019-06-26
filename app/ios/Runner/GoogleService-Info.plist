@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>583597251167-r7fv1on372sm71166nuhecgiht7827bm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.583597251167-r7fv1on372sm71166nuhecgiht7827bm</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDe6glanAbJo8TnPp70o-RcYGXHYU7uAyk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>583597251167</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.pkcsecurity.applestoai</string>
+	<key>PROJECT_ID</key>
+	<string>apples-to-ai</string>
+	<key>STORAGE_BUCKET</key>
+	<string>apples-to-ai.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:583597251167:ios:54b6b096b8357220</string>
+	<key>DATABASE_URL</key>
+	<string>https://apples-to-ai.firebaseio.com</string>
+</dict>
+</plist>

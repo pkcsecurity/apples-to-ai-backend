@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "583597251167",
+    "firebase_url": "https://apples-to-ai.firebaseio.com",
+    "project_id": "apples-to-ai",
+    "storage_bucket": "apples-to-ai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583597251167:android:54b6b096b8357220",
+        "android_client_info": {
+          "package_name": "com.pkcsecurity.applestoai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "583597251167-cgq2la53destjhjlurjbfj5okcj63o37.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHJYucc6M0h3d-Rg4nsMtLoMIcvqRi-rU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "583597251167-cgq2la53destjhjlurjbfj5okcj63o37.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "583597251167-r7fv1on372sm71166nuhecgiht7827bm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pkcsecurity.applestoai",
+                "app_store_id": "1454837172"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

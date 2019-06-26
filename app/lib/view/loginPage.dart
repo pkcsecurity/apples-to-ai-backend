@@ -1,11 +1,18 @@
 import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:app/bloc/userBloc.dart';
+
 import 'package:app/view/widgets/button.dart';
 import 'package:app/view/widgets/color.dart';
 import 'package:app/view/widgets/misc.dart';
 import 'package:app/view/widgets/input.dart';
 
 class LoginPage extends StatelessWidget{
+  final userBloc = UserBloc.instance;
+
   @override
   Widget build(BuildContext context){
     final mediaData = MediaQuery.of(context);
@@ -60,7 +67,13 @@ class LoginPage extends StatelessWidget{
         "Sign In",
         LightOliveGreen,
         Colors.white,
-        action: () => print("Need to validate input")
+        action: () {
+          userBloc.handleSignIn().then((FirebaseUser user) {
+            print('Signed in user: $user');
+          }).catchError((e) {
+            print('Caught exception $e');
+          });
+        }
       )
     );
   }
@@ -80,7 +93,10 @@ class LoginPage extends StatelessWidget{
         "Register",
         LightOliveGreen,
         Colors.white,
-        action: () => Navigator.of(context).pushNamed('/register')
+        action: () {
+          //userBloc.createUserWithEmailAndPassword('sreeves+1@pkc.io', 'security-first-password');
+          Navigator.of(context).pushNamed('/register');
+        }
       )
     );
   }
@@ -91,17 +107,22 @@ class LoginPage extends StatelessWidget{
     final width = mediaData.size.width;
 
     return Container(
-      padding: EdgeInsets.only(
-        top: height * .02,
-        right: width * .1665,
-        left: width * .1665,
-      ),
-      child: raisedButton(
-        "Just Play",
-        LightOliveGreen,
-        Colors.white,
-        action: () => Navigator.of(context).pushNamed('/home')
-      )
+        padding: EdgeInsets.only(
+          top: height * .02,
+          right: width * .1665,
+          left: width * .1665,
+        ),
+        child: raisedButton(
+            "Just Play",
+            LightOliveGreen,
+            Colors.white,
+            action: () {
+              userBloc.loginWithPhoneNumber('+16612194140');
+
+              //Navigator.of(context).pushNamed('/home');
+            }
+        )
     );
   }
 }
+
