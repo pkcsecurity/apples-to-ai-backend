@@ -13,10 +13,9 @@ class UserBloc {
 
   UserBloc._internal();
 
-
   createUserWithEmailAndPassword(String email, String password) async {
     final user = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-    (await _auth.currentUser()).updateProfile(userUpdateInfo);
+    // (await _auth.currentUser()).updateProfile(userUpdateInfo);
     print(user);
     return user;
   }
@@ -29,10 +28,8 @@ class UserBloc {
         verificationFailed: (AuthException ex) {print('Got an auth exception $ex');},
         codeSent: (String s, [int i]) {print('Sent the code $s - $i');},
         codeAutoRetrievalTimeout: (String s ) {print('Auto Retrieval timeout $s');});
-
     return user;
   }
-
 
   Future<FirebaseUser> handleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
@@ -47,6 +44,4 @@ class UserBloc {
     print("signed in " + user.displayName);
     return user;
   }
-
-
 }
