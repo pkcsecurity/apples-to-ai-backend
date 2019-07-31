@@ -1,10 +1,7 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:app/bloc/userBloc.dart';
-
 import 'package:app/view/widgets/button.dart';
 import 'package:app/view/widgets/color.dart';
 import 'package:app/view/widgets/misc.dart';
@@ -117,7 +114,7 @@ class LoginPage extends StatelessWidget{
             LightOliveGreen,
             Colors.white,
             action: () {
-              userBloc.loginWithPhoneNumber('+16268238397');
+              // userBloc.loginWithPhoneNumber('+16268238397');
 
               //Navigator.of(context).pushNamed('/home');
             }

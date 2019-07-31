@@ -20,14 +20,14 @@ class UserBloc {
     return user;
   }
 
-  loginWithPhoneNumber(String number) async {
+  registerWithPhoneNumber(String number) async {
     final user = await _auth.verifyPhoneNumber(
-        phoneNumber: number,
-        timeout: Duration(minutes: 5),
-        verificationCompleted: (AuthCredential auth) {print('Got some auth credentials $auth');},
-        verificationFailed: (AuthException ex) {print('Got an auth exception $ex');},
-        codeSent: (String s, [int i]) {print('Sent the code $s - $i');},
-        codeAutoRetrievalTimeout: (String s ) {print('Auto Retrieval timeout $s');});
+      phoneNumber: number,
+      timeout: Duration(minutes: 5),
+      verificationCompleted: (AuthCredential auth) {print('Got some auth credentials $auth');},
+      verificationFailed: (AuthException ex) {print('Got an auth exception $ex');},
+      codeSent: (String s, [int i]) {print('Sent the code $s - $i');},
+      codeAutoRetrievalTimeout: (String s ) {print('Auto Retrieval timeout $s');});
     return user;
   }
 
@@ -38,7 +38,7 @@ class UserBloc {
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
-    );
+      );
 
     final FirebaseUser user = await _auth.signInWithCredential(credential);
     print("signed in " + user.displayName);
