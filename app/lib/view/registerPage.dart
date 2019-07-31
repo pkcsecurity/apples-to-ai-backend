@@ -1,11 +1,29 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:app/bloc/userBloc.dart';
 import 'package:app/view/widgets/button.dart';
 import 'package:app/view/widgets/color.dart';
 import 'package:app/view/widgets/misc.dart';
 import 'package:app/view/widgets/input.dart';
 
-class RegisterPage extends StatelessWidget{
+class RegisterPage extends StatefulWidget {
+  @override
+  _RegisterPageState createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage>{
+  final userBloc = UserBloc.instance;
+  final phoneNumberController = TextEditingController();
+  final usernameController = TextEditingController();
+
+  @override
+  void dispose() {
+    phoneNumberController.dispose();
+    usernameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context){
     final mediaData = MediaQuery.of(context);
@@ -33,9 +51,8 @@ class RegisterPage extends StatelessWidget{
                 fontSize: 20.0
               ),
             ),
-            inputField("Phone Number", ""),
-            inputField("Username", ""),
-            inputField("Password", "", secure: true),
+            inputField("Phone Number", "", controller: phoneNumberController),
+            inputField("Username", "", controller: usernameController),
             _registerButton(context),
           ],
         )
@@ -60,7 +77,8 @@ class RegisterPage extends StatelessWidget{
         LightOliveGreen,
         Colors.white,
         action: () {
-          print("Need to validate inputs.");
+          userBloc.registerWithPhoneNumber(phoneNumberController.text);
+          print(phoneNumberController.text);
           Navigator.of(context).pushNamed('/verification');
         }
       )
